@@ -62,7 +62,15 @@ export function resolveWhatsAppPhoneNumber() {
 export function resolveResendFromEmail() {
   const env = getServerTrackingEnv();
   const candidate = process.env.NODE_ENV === "production" ? env.resendFromEmailProd : env.resendFromEmailDev;
-  return candidate || "No-Reply <demo@mail.alphaonlineclass.com>";
+  if (!candidate) {
+    return "No-Reply <demo@mail.alphaonlineclass.com>";
+  }
+
+  if (candidate.includes("<") && candidate.includes(">")) {
+    return candidate;
+  }
+
+  return `No-Reply <${candidate}>`;
 }
 
 export function resolveResendToEmail() {
