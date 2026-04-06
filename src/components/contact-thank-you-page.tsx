@@ -4,12 +4,7 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { StandardFooter } from "@/components/standard-footer";
-import {
-  buildContactWhatsAppHref,
-  CONTACT_INQUIRY_STORAGE_KEY,
-  CONTACT_WHATSAPP_PHONE,
-  type ContactInquiry,
-} from "@/lib/contact-inquiry";
+import { getContactWhatsAppPhoneNumber } from "@/lib/whatsapp/contact-inquiries";
 import styles from "./contact-thank-you-page.module.css";
 
 function WhatsAppIcon() {
@@ -42,41 +37,14 @@ function formatSubmittedAt(value: string) {
 }
 
 export function ContactThankYouPage() {
-  const [inquiry, setInquiry] = useState<ContactInquiry | null>(null);
   const [redirectTarget, setRedirectTarget] = useState("");
   const [redirectInSeconds, setRedirectInSeconds] = useState(3);
 
   useEffect(() => {
-    const storedInquiry = window.sessionStorage.getItem(CONTACT_INQUIRY_STORAGE_KEY);
-
-    if (!storedInquiry) {
-      setInquiry(null);
-      setRedirectTarget(`https://wa.me/${CONTACT_WHATSAPP_PHONE}`);
-      return;
+    const whatsappPhone = getContactWhatsAppPhoneNumber();
+    if (whatsappPhone) {
+      setRedirectTarget(`https://wa.me/${whatsappPhone}`);
     }
-
-    try {
-      const parsedInquiry = JSON.parse(storedInquiry) as Partial<ContactInquiry>;
-
-      if (
-        typeof parsedInquiry.fullName === "string" &&
-        typeof parsedInquiry.email === "string" &&
-        typeof parsedInquiry.message === "string" &&
-        typeof parsedInquiry.type === "string" &&
-        typeof parsedInquiry.submittedAt === "string"
-      ) {
-        const contactInquiry = parsedInquiry as ContactInquiry;
-        setInquiry(contactInquiry);
-        setRedirectTarget(buildContactWhatsAppHref(contactInquiry));
-        window.sessionStorage.removeItem(CONTACT_INQUIRY_STORAGE_KEY);
-        return;
-      }
-    } catch {
-      // Fall through to the fallback view.
-    }
-
-    setInquiry(null);
-    setRedirectTarget(`https://wa.me/${CONTACT_WHATSAPP_PHONE}`);
   }, []);
 
   useEffect(() => {
@@ -98,13 +66,7 @@ export function ContactThankYouPage() {
     };
   }, [redirectTarget]);
 
-  const formattedSubmittedAt = useMemo(() => {
-    if (!inquiry) {
-      return "";
-    }
-
-    return formatSubmittedAt(inquiry.submittedAt);
-  }, [inquiry]);
+  const formattedSubmittedAt = useMemo(() => formatSubmittedAt(new Date().toISOString()), []);
 
   return (
     <main className={styles.page}>
@@ -127,44 +89,20 @@ export function ContactThankYouPage() {
         <section className={styles.content}>
           <div className={styles.panel}>
             <div className={styles.panelTitle}>
-              <h2>Your submitted message</h2>
+              <h2>Your request is on its way</h2>
               <p>
-                We&apos;ll send your message to WhatsApp so the customer care team can respond faster.
+                Your submission was handled by the backend first, and WhatsApp is opening now with the
+                prepared conversation.
               </p>
             </div>
 
-            {inquiry ? (
-              <div className={styles.inquiryCard}>
-                <div className={styles.inquiryRow}>
-                  <span>Name</span>
-                  <strong>{inquiry.fullName}</strong>
-                </div>
-                <div className={styles.inquiryRow}>
-                  <span>Email</span>
-                  <strong>{inquiry.email}</strong>
-                </div>
-                <div className={styles.inquiryRow}>
-                  <span>Inquiry Type</span>
-                  <strong>{inquiry.type}</strong>
-                </div>
-                <div className={styles.inquiryRow}>
-                  <span>Message</span>
-                  <p className={styles.inquiryMessage}>{inquiry.message}</p>
-                </div>
-                <div className={styles.inquiryRow}>
-                  <span>Submitted</span>
-                  <strong>{formattedSubmittedAt}</strong>
-                </div>
-              </div>
-            ) : (
-              <div className={styles.fallback}>
-                <span>Fallback mode</span>
-                <p>
-                  We could not find your saved inquiry, so WhatsApp will open without the prefilled
-                  message. You can still continue the conversation from there.
-                </p>
-              </div>
-            )}
+            <div className={styles.fallback}>
+              <span>Fallback mode</span>
+              <p>
+                If you reached this page manually, WhatsApp will open without the form context. For a
+                normal submission, the app now redirects directly after backend success.
+              </p>
+            </div>
           </div>
 
           <div className={styles.panel}>
@@ -179,7 +117,7 @@ export function ContactThankYouPage() {
             <div className={styles.actionStack}>
               <a
                 className={styles.primaryButton}
-                href={redirectTarget || `https://wa.me/${CONTACT_WHATSAPP_PHONE}`}
+                href={redirectTarget || "#"}
               >
                 <WhatsAppIcon />
                 Open WhatsApp
@@ -191,6 +129,9 @@ export function ContactThankYouPage() {
 
             <p className={styles.countdown}>
               Redirecting in {redirectInSeconds} second{redirectInSeconds === 1 ? "" : "s"}.
+            </p>
+            <p className={styles.fallback} style={{ marginTop: 16 }}>
+              Submitted at {formattedSubmittedAt}
             </p>
           </div>
         </section>

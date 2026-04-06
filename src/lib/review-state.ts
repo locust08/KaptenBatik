@@ -144,6 +144,13 @@ export const DEFAULT_PRODUCT_REVIEWS: ProductReviewEntry[] = [
   },
 ] as const;
 
+const REMOVED_SITE_REVIEW_SIGNATURE = {
+  message: "asrtyh",
+  rating: 5 as ReviewRating,
+  reviewerName: "Guest visitor",
+  title: "234567",
+};
+
 function parseStoredArray<T>(value: string | null) {
   if (!value) {
     return [];
@@ -166,6 +173,15 @@ function normalizeReviewRating(rating: number): ReviewRating {
   return Math.min(5, Math.max(1, Math.round(rating))) as ReviewRating;
 }
 
+function isRemovedSiteReview(review: SiteReviewEntry) {
+  return (
+    review.message === REMOVED_SITE_REVIEW_SIGNATURE.message &&
+    review.rating === REMOVED_SITE_REVIEW_SIGNATURE.rating &&
+    review.reviewerName === REMOVED_SITE_REVIEW_SIGNATURE.reviewerName &&
+    review.title === REMOVED_SITE_REVIEW_SIGNATURE.title
+  );
+}
+
 export function readSiteReviews(): SiteReviewEntry[] {
   if (typeof window === "undefined") {
     return [...DEFAULT_SITE_REVIEWS];
@@ -181,7 +197,13 @@ export function readSiteReviews(): SiteReviewEntry[] {
       Number.isFinite(review.rating),
   );
 
-  return storedReviews.length ? storedReviews : [...DEFAULT_SITE_REVIEWS];
+  const filteredReviews = storedReviews.filter((review) => !isRemovedSiteReview(review));
+
+  if (filteredReviews.length !== storedReviews.length) {
+    window.localStorage.setItem(SITE_REVIEW_KEY, JSON.stringify(filteredReviews));
+  }
+
+  return filteredReviews.length ? filteredReviews : [...DEFAULT_SITE_REVIEWS];
 }
 
 export function readVisibleSiteReviews() {

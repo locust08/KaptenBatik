@@ -83,13 +83,13 @@ body {
 @media (max-width: 767px) {
   html,
   body {
-    width: 100dvw;
-    max-width: 100dvw;
+    width: 100%;
+    max-width: 100%;
   }
 
   main {
-    width: 100dvw;
-    max-width: 100dvw;
+    width: 100%;
+    max-width: 100%;
   }
 }
 
@@ -132,6 +132,9 @@ img {
 
 .collection-page {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
 }
 
 .scroll-reveal-root .reveal-item {
@@ -3266,8 +3269,8 @@ img {
   .cta-section,
   .footer-grid,
   .footer-legal {
-    width: 100dvw;
-    max-width: none;
+    width: 100%;
+    max-width: 100%;
     margin-left: 0;
     margin-right: 0;
   }
@@ -3275,12 +3278,12 @@ img {
   .site-header.is-pinned {
     left: 0;
     right: 0;
-    width: 100dvw;
-    max-width: 100dvw;
+    width: 100%;
+    max-width: 100%;
   }
 
   .hero-section {
-    width: 100dvw;
+    width: 100%;
     margin-left: 0;
   }
 
@@ -3810,12 +3813,12 @@ img {
     bottom: 14px;
     left: auto;
     align-items: stretch;
-    width: min(332px, calc(100dvw - 28px));
+    width: min(332px, calc(100% - 28px));
   }
 
   .support-chat-card {
     width: 100%;
-    max-width: calc(100dvw - 28px);
+    max-width: calc(100% - 28px);
     border-radius: 20px;
   }
 

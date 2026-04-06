@@ -6,17 +6,26 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
+    "check:contact-env": "node scripts/verify-contact-env.mjs",
+    "provision:leads-table": "node scripts/apply-leads-kaptenbatik-table.mjs",
+    "provision:tracking": "node scripts/provision-google-tracking.mjs",
     "download:assets": "node scripts/download-reference-assets.mjs",
     "download:figma-assets": "node scripts/download-figma-assets.mjs",
     "download:kapten-assets": "node scripts/download-kapten-site-assets.mjs"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.53.0",
+    "googleapis": "^148.0.0",
     "next": "16.2.1",
+    "pg": "^8.20.0",
     "react": "19.2.0",
-    "react-dom": "19.2.0"
+    "react-dom": "19.2.0",
+    "resend": "^4.8.0",
+    "zod": "^4.1.11"
   },
   "devDependencies": {
     "@types/node": "24.10.0",
+    "@types/pg": "^8.20.0",
     "@types/react": "19.2.2",
     "@types/react-dom": "19.2.2",
     "playwright": "^1.58.2",

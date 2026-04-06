@@ -311,6 +311,36 @@ export default function HomePage() {
     }
   }, []);
 
+  useEffect(() => {
+    const video = heroVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.preload = "auto";
+
+    const startPlayback = () => {
+      void video.play().catch(() => {
+        // If autoplay is blocked, the toggle remains available.
+      });
+    };
+
+    if (video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      startPlayback();
+      return;
+    }
+
+    video.addEventListener("canplay", startPlayback, { once: true });
+
+    return () => {
+      video.removeEventListener("canplay", startPlayback);
+    };
+  }, []);
+
   const scrollToCollection = (collectionKey: CollectionKey) => {
     handleCollectionChange(collectionKey);
 
@@ -499,7 +529,7 @@ export default function HomePage() {
             loop
             muted={isHeroVideoMuted}
             playsInline
-            preload="metadata"
+            preload="auto"
             ref={heroVideoRef}
           >
             <source src="/kapten-site-assets/home/hero-video.mp4" type="video/mp4" />
@@ -535,7 +565,7 @@ export default function HomePage() {
                 Explore Collection
               </button>
               {accountState === "logged-out" ? (
-                <Link className="hero-secondary-button" href="/#rewards-program">
+                <Link className="hero-secondary-button" href="/register">
                   Join Rewards
                 </Link>
               ) : null}

@@ -1,13 +1,11 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { StandardFooter } from "@/components/standard-footer";
-import {
-  CONTACT_INQUIRY_STORAGE_KEY,
-  type ContactInquiry,
-} from "@/lib/contact-inquiry";
+import { pushLeadFormSubmitSuccessTracking } from "@/lib/tracking/analytics";
+import { getOrCreateContactTrackingSnapshot } from "@/lib/tracking/capture";
+import type { ContactTrackingSnapshot } from "@/types/tracking";
 import styles from "./contact-page.module.css";
 
 const allStoreLocationsHref =
@@ -280,51 +278,20 @@ function distanceKm(
 }
 
 export function ContactPage() {
-  const router = useRouter();
   const [selectedBoutique, setSelectedBoutique] = useState(boutiqueLocations[0].id);
+  const [tracking, setTracking] = useState<ContactTrackingSnapshot | null>(null);
   const [userLocation, setUserLocation] = useState<{
     lat: number;
     lng: number;
   } | null>(null);
   const [locationMessage, setLocationMessage] = useState("Enable location to surface the nearest boutique.");
   const [status, setStatus] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const manualSelectionRef = useRef(false);
-  const buildTrackingSessionId = () => {
-    const storageKey = "kapten-batik-tracking-session-id";
-    try {
-      const existingSessionId = window.sessionStorage.getItem(storageKey);
 
-      if (existingSessionId) {
-        return existingSessionId;
-      }
-
-      const nextSessionId =
-        typeof crypto !== "undefined" && "randomUUID" in crypto
-          ? crypto.randomUUID()
-          : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-
-      window.sessionStorage.setItem(storageKey, nextSessionId);
-      return nextSessionId;
-    } catch {
-      return typeof crypto !== "undefined" && "randomUUID" in crypto
-        ? crypto.randomUUID()
-        : `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
-    }
-  };
-
-  const resolveLandingPage = () => {
-    try {
-      const referrer = document.referrer ? new URL(document.referrer) : null;
-
-      if (referrer && referrer.origin === window.location.origin) {
-        return referrer.href;
-      }
-    } catch {
-      // Ignore malformed referrers and fall back below.
-    }
-
-    return `${window.location.origin}/`;
-  };
+  useEffect(() => {
+    setTracking(getOrCreateContactTrackingSnapshot());
+  }, []);
 
   useEffect(() => {
     if (!("geolocation" in navigator)) {
@@ -379,43 +346,78 @@ export function ContactPage() {
   const selectedDistance = userLocation ? distanceKm(userLocation, featuredBoutique.coordinates) : null;
   const isNearestFeatured = boutiqueOptions[0]?.id === featuredBoutique.id;
 
-  const submitInquiry = (formData: FormData) => {
-    const fullName = String(formData.get("fullName") ?? "").trim();
-    const email = String(formData.get("email") ?? "").trim();
-    const type = String(formData.get("type") ?? "").trim();
-    const message = String(formData.get("message") ?? "").trim();
-
-    if (!fullName || !email || !message) {
-      setStatus("Please complete the required fields before sending your request.");
+  const submitInquiry = async (formData: FormData) => {
+    if (!tracking) {
+      setStatus("Preparing your secure submission. Please try again in a moment.");
       return;
     }
 
-    const inquiry: ContactInquiry = {
-      email,
-      fullName,
-      landingPage: resolveLandingPage(),
-      phone: "N/A",
-      sessionId: buildTrackingSessionId(),
-      message,
-      submittedAt: new Date().toISOString(),
-      type,
-      utmCampaign: new URLSearchParams(window.location.search).get("utm_campaign") ?? "N/A",
-      utmMedium: new URLSearchParams(window.location.search).get("utm_medium") ?? "N/A",
-      utmSource: new URLSearchParams(window.location.search).get("utm_source") ?? "N/A",
-    };
+    const payload = Object.fromEntries(formData.entries());
+
+    setIsSubmitting(true);
+    setStatus("");
 
     try {
-      window.sessionStorage.setItem(CONTACT_INQUIRY_STORAGE_KEY, JSON.stringify(inquiry));
+      const response = await fetch("/api/leads", {
+        body: JSON.stringify(payload),
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+        method: "POST",
+      });
+
+      type ContactInquiryApiSuccess = {
+        emailConfigured: boolean;
+        emailSent: boolean;
+        emailStatus: {
+          attempted: boolean;
+          configured: boolean;
+          sent: boolean;
+          warnings: string[];
+        };
+        leadId: string;
+        success: true;
+        warnings: string[];
+        whatsappMessage: string | null;
+        whatsappRedirectReady: boolean;
+        whatsappUrl: string | null;
+      };
+      type ContactInquiryApiFailure = {
+        error: string;
+        success: false;
+      };
+      type ContactInquiryApiResult = ContactInquiryApiSuccess | ContactInquiryApiFailure;
+
+      const result = (await response.json()) as ContactInquiryApiResult;
+
+      if (!response.ok || !result.success) {
+        setStatus(!result.success && result.error ? result.error : "We could not submit your request right now.");
+        return;
+      }
+
+      pushLeadFormSubmitSuccessTracking({
+        formName: "contact_us",
+        leadId: result.leadId,
+        tracking,
+      });
+
+      if (result.whatsappRedirectReady && result.whatsappUrl) {
+        window.location.replace(result.whatsappUrl);
+        return;
+      }
+
+      setStatus("Your lead was saved, but WhatsApp is not ready right now.");
     } catch {
-      // If storage is unavailable, the thank-you page still falls back to WhatsApp.
+      setStatus("We could not submit your request right now. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
-    setStatus("");
-    router.push("/contact-us/thank-you");
   };
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    submitInquiry(new FormData(event.currentTarget));
+    void submitInquiry(new FormData(event.currentTarget));
   };
 
   return (
@@ -456,7 +458,30 @@ export function ContactPage() {
             </p>
           </div>
 
-          <form className={styles.inquiryForm} onSubmit={handleSubmit}>
+          <form action="/api/leads" className={styles.inquiryForm} method="post" onSubmit={handleSubmit}>
+            {tracking ? (
+              <>
+                <input name="capturedAt" type="hidden" value={tracking.capturedAt} />
+                <input name="clickId" type="hidden" value={tracking.clickId} />
+                <input name="fbclid" type="hidden" value={tracking.fbclid} />
+                <input name="gclid" type="hidden" value={tracking.gclid} />
+                <input name="landingPage" type="hidden" value={tracking.landingPage} />
+                <input name="landingPagePath" type="hidden" value={tracking.landingPagePath} />
+                <input name="msclkid" type="hidden" value={tracking.msclkid} />
+                <input name="pageHistory" type="hidden" value={tracking.pageHistory} />
+                <input name="pagePath" type="hidden" value={tracking.pagePath} />
+                <input name="pageUrl" type="hidden" value={tracking.pageUrl} />
+                <input name="referrer" type="hidden" value={tracking.referrer} />
+                <input name="sessionId" type="hidden" value={tracking.sessionId} />
+                <input name="trackingSessionId" type="hidden" value={tracking.trackingSessionId} />
+                <input name="ttclid" type="hidden" value={tracking.ttclid} />
+                <input name="utmCampaign" type="hidden" value={tracking.utmCampaign} />
+                <input name="utmContent" type="hidden" value={tracking.utmContent} />
+                <input name="utmMedium" type="hidden" value={tracking.utmMedium} />
+                <input name="utmSource" type="hidden" value={tracking.utmSource} />
+                <input name="utmTerm" type="hidden" value={tracking.utmTerm} />
+              </>
+            ) : null}
             <div className={styles.twoUp}>
               <div className={styles.field}>
                 <label htmlFor="contact-name">Full Name</label>
@@ -510,8 +535,8 @@ export function ContactPage() {
               </a>
             </p>
 
-            <button className={styles.submitButton} type="submit">
-              Send Message
+            <button className={styles.submitButton} disabled={isSubmitting} type="submit">
+              {isSubmitting ? "Sending..." : "Send Message"}
             </button>
             {status ? <p className={styles.status}>{status}</p> : null}
           </form>

@@ -1,8 +1,11 @@
 import type { Metadata } from "next";
 import type { Viewport } from "next";
+import type { ReactNode } from "react";
 import { CartProvider } from "@/components/cart-provider";
 import { CustomCursor } from "@/components/custom-cursor";
 import { SupportChat } from "@/components/support-chat";
+import { GoogleTagManager } from "@/lib/tracking/gtm";
+import { TrackingProvider } from "@/lib/tracking/tracking-provider";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,15 +23,16 @@ export const viewport: Viewport = {
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: ReactNode;
 }>) {
   return (
     <html lang="en">
       <body>
+        <GoogleTagManager />
         <CartProvider>
           <CustomCursor />
           <SupportChat />
-          {children}
+          <TrackingProvider>{children}</TrackingProvider>
         </CartProvider>
       </body>
     </html>
