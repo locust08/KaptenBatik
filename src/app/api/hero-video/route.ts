@@ -1,9 +1,10 @@
 import { createReadStream } from "node:fs";
 import { stat } from "node:fs/promises";
+import { join } from "node:path";
 import { Readable } from "node:stream";
 import { NextRequest } from "next/server";
 
-const HERO_VIDEO_PATH = "C:\\Users\\bany\\Downloads\\202604011636.mp4";
+const HERO_VIDEO_PATH = join(process.cwd(), "public", "kapten-site-assets", "home", "hero-video.mp4");
 const VIDEO_CONTENT_TYPE = "video/mp4";
 const STREAM_CHUNK_SIZE = 64 * 1024;
 

@@ -311,27 +311,6 @@ export default function HomePage() {
     }
   }, []);
 
-  const toggleHeroVideoSound = async () => {
-    const video = heroVideoRef.current;
-
-    if (!video) {
-      return;
-    }
-
-    const nextMuted = !isHeroVideoMuted;
-    video.muted = nextMuted;
-    video.volume = nextMuted ? 0 : 0.85;
-    setHeroVideoMuted(nextMuted);
-
-    if (!nextMuted) {
-      try {
-        await video.play();
-      } catch {
-        // Ignore autoplay rejections; the user can try again via the toggle.
-      }
-    }
-  };
-
   const scrollToCollection = (collectionKey: CollectionKey) => {
     handleCollectionChange(collectionKey);
 
@@ -402,6 +381,27 @@ export default function HomePage() {
     setNewsletterMessage(
       "You're in. We'll share new arrivals and quiet highlights from the collection.",
     );
+  };
+
+  const toggleHeroVideoSound = async () => {
+    const video = heroVideoRef.current;
+
+    if (!video) {
+      return;
+    }
+
+    const nextMuted = !isHeroVideoMuted;
+    video.muted = nextMuted;
+    video.volume = nextMuted ? 0 : 0.85;
+    setHeroVideoMuted(nextMuted);
+
+    if (!nextMuted) {
+      try {
+        await video.play();
+      } catch {
+        // Ignore autoplay rejections; the user can try again via the toggle.
+      }
+    }
   };
 
   const handleModelSelect = (detailPath: string) => {

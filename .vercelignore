@@ -1,0 +1,10 @@
+.next/
+node_modules/
+.codex/
+playwright-shots/
+qa-logs/
+qa-screens/
+
+*.log
+*.pid
+*.tsbuildinfo
