@@ -1,0 +1,268 @@
+{
+  "referenceUrl": "https://modestwear-tnc.webflow.io/",
+  "downloadedAt": "2026-03-25T02:26:59.772Z",
+  "images": [
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6805d17d680e3d11f92a5db5_Logo.avif",
+      "savedTo": "public/reference-assets/images/6805d17d680e3d11f92a5db5_Logo.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6805db6220e2aad6e557d547_0247798b6127adb2cc1237bae1894ef6_Header%20Nav%20Image.avif",
+      "savedTo": "public/reference-assets/images/6805db6220e2aad6e557d547_0247798b6127adb2cc1237bae1894ef6_Header-Nav-Image.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/680872da382a5b04b45197a5_16461baed8d7b8cd1a445bfb5e26d54c_Explore%20Collection.avif",
+      "savedTo": "public/reference-assets/images/680872da382a5b04b45197a5_16461baed8d7b8cd1a445bfb5e26d54c_Explore-Collection.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68088758b7c225025ec9bfb5_f5648db6859d17c9d30244adaa5fc008_Explore%20Trending%20Hijab%20Collections.avif",
+      "savedTo": "public/reference-assets/images/68088758b7c225025ec9bfb5_f5648db6859d17c9d30244adaa5fc008_Explore-Trending-Hijab-Collections.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6808878564351d77458ff082_5b4c6cdb8ca186b8e0215c857efe58ca_Explore%20Trending%20Abaya%20Collections.avif",
+      "savedTo": "public/reference-assets/images/6808878564351d77458ff082_5b4c6cdb8ca186b8e0215c857efe58ca_Explore-Trending-Abaya-Collections.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/680887a300af2997f8e2cbb2_d4e8155d273818cf21e69b638725fb0d_Explore%20Trending%20Dresses%20Collections.avif",
+      "savedTo": "public/reference-assets/images/680887a300af2997f8e2cbb2_d4e8155d273818cf21e69b638725fb0d_Explore-Trending-Dresses-Collections.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808810a8519d61739ff3e0e_Hijabs%20Thumbnail.avif",
+      "savedTo": "public/reference-assets/images/6808810a8519d61739ff3e0e_Hijabs-Thumbnail.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68088d3daec0c110e06674e0_Abayas%20Thumbnail.avif",
+      "savedTo": "public/reference-assets/images/68088d3daec0c110e06674e0_Abayas-Thumbnail.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/680881d595a820f0d0950c5c_Dress%20Thumbnail.avif",
+      "savedTo": "public/reference-assets/images/680881d595a820f0d0950c5c_Dress-Thumbnail.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68076326e172d20be609f479_Theo.svg",
+      "savedTo": "public/reference-assets/images/68076326e172d20be609f479_Theo.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68076316756fbaa8f5afeffe_Snowflake.svg",
+      "savedTo": "public/reference-assets/images/68076316756fbaa8f5afeffe_Snowflake.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68076316084a2a5237184536_Network.svg",
+      "savedTo": "public/reference-assets/images/68076316084a2a5237184536_Network.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/680763262d70dec45ff9262e_Venice.svg",
+      "savedTo": "public/reference-assets/images/680763262d70dec45ff9262e_Venice.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6807631622edcc8cf7313864_Delaware.svg",
+      "savedTo": "public/reference-assets/images/6807631622edcc8cf7313864_Delaware.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68076326eb67b22cec1ad6d0_California.svg",
+      "savedTo": "public/reference-assets/images/68076326eb67b22cec1ad6d0_California.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a88349c80268712a0382_Cherry%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a88349c80268712a0382_Cherry-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a8acf7ec8300bb710cea_Shrug%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a8acf7ec8300bb710cea_Shrug-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a83f7a266df94c178d56_Printed%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a83f7a266df94c178d56_Printed-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a8fb8e72cf62fdd0b4a7_Cotton%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a8fb8e72cf62fdd0b4a7_Cotton-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a93e0a1284ec9bef8e2c_Party%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a93e0a1284ec9bef8e2c_Party-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a7c04cfaa79f8c0578aa_Shiny%20Hijab.png",
+      "savedTo": "public/reference-assets/images/6808a7c04cfaa79f8c0578aa_Shiny-Hijab.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/680a19eb900a0443d6795733_Shrug%20Abaya.avif",
+      "savedTo": "public/reference-assets/images/680a19eb900a0443d6795733_Shrug-Abaya.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a782e429ac10391e9972_Koti%20Abaya.png",
+      "savedTo": "public/reference-assets/images/6808a782e429ac10391e9972_Koti-Abaya.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a7520f31b0cb0e1ca348_Party%20Abaya.png",
+      "savedTo": "public/reference-assets/images/6808a7520f31b0cb0e1ca348_Party-Abaya.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/6808a72d64351d7745a8ec7b_Printed%20Abaya.png",
+      "savedTo": "public/reference-assets/images/6808a72d64351d7745a8ec7b_Printed-Abaya.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089e15d6c545889f73ac58_Short%20Abaya.png",
+      "savedTo": "public/reference-assets/images/68089e15d6c545889f73ac58_Short-Abaya.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089ca0e6f2595abe304ab9_Stoned%20Abaya.png",
+      "savedTo": "public/reference-assets/images/68089ca0e6f2595abe304ab9_Stoned-Abaya.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/680a19a32114cec457bc5e54_Stoned%20Dress.avif",
+      "savedTo": "public/reference-assets/images/680a19a32114cec457bc5e54_Stoned-Dress.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089c21d183c32d48234c5c_Cape%20Dress.png",
+      "savedTo": "public/reference-assets/images/68089c21d183c32d48234c5c_Cape-Dress.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089bd34b363a6d08ef35fd_Gown%20Dress.png",
+      "savedTo": "public/reference-assets/images/68089bd34b363a6d08ef35fd_Gown-Dress.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089baba24fdd87d3b2ea63_Koti%20Dress.png",
+      "savedTo": "public/reference-assets/images/68089baba24fdd87d3b2ea63_Koti-Dress.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089b8439ada8bb685773f5_Party%20Dress.png",
+      "savedTo": "public/reference-assets/images/68089b8439ada8bb685773f5_Party-Dress.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68089b460224c2e3eeceeb34_Printed%20Dress.png",
+      "savedTo": "public/reference-assets/images/68089b460224c2e3eeceeb34_Printed-Dress.png"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68108303fa2871c71829b6b2_Floral%20Kimono%20Cardigan.avif",
+      "savedTo": "public/reference-assets/images/68108303fa2871c71829b6b2_Floral-Kimono-Cardigan.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681082e67311f9be23941f26_Floral%20Resort%20Kimono.avif",
+      "savedTo": "public/reference-assets/images/681082e67311f9be23941f26_Floral-Resort-Kimono.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681082c58fd3e438919d41fa_Boho%20Crochet%20Cardigan.avif",
+      "savedTo": "public/reference-assets/images/681082c58fd3e438919d41fa_Boho-Crochet-Cardigan.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68108284cc930f07d1480bb1_Jersey%20Midi%20Skirt.avif",
+      "savedTo": "public/reference-assets/images/68108284cc930f07d1480bb1_Jersey-Midi-Skirt.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681082620d3eef41582d487d_Boho%20Maxi%20Skirt.avif",
+      "savedTo": "public/reference-assets/images/681082620d3eef41582d487d_Boho-Maxi-Skirt.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681082444f2fe7e7d9e29d1d_Flowy%20Midi%20Skirt.avif",
+      "savedTo": "public/reference-assets/images/681082444f2fe7e7d9e29d1d_Flowy-Midi-Skirt.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681084c759ebc50fbfafd3dd_Mint%20Maternity%20Kaftan.avif",
+      "savedTo": "public/reference-assets/images/681084c759ebc50fbfafd3dd_Mint-Maternity-Kaftan.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/68108219805f1796b46eec9f_Maternity%20Kaftan%20Mint.avif",
+      "savedTo": "public/reference-assets/images/68108219805f1796b46eec9f_Maternity-Kaftan-Mint.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6805d23f20e2aad6e5520f53/681081b7cb477259c664462a_Short%20Kaftan%20Mint.avif",
+      "savedTo": "public/reference-assets/images/681081b7cb477259c664462a_Short-Kaftan-Mint.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6808d3813e38a2710e8eab80_Casual%20Workwear.avif",
+      "savedTo": "public/reference-assets/images/6808d3813e38a2710e8eab80_Casual-Workwear.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6808d38463be23921b978861_Wedding%20%26%20Eid%20Looks.avif",
+      "savedTo": "public/reference-assets/images/6808d38463be23921b978861_Wedding-Eid-Looks.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6808d388e6b8ef1da6e579df_Hajj%20%26%20Umrah%20Essentials.avif",
+      "savedTo": "public/reference-assets/images/6808d388e6b8ef1da6e579df_Hajj-Umrah-Essentials.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071dbea7562a602a703a1e_ModestWearStyle%20on%20Instagram%2001.avif",
+      "savedTo": "public/reference-assets/images/68071dbea7562a602a703a1e_ModestWearStyle-on-Instagram-01.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071dc3457ccd3f6ae838e2_ModestWearStyle%20on%20Instagram%2002.avif",
+      "savedTo": "public/reference-assets/images/68071dc3457ccd3f6ae838e2_ModestWearStyle-on-Instagram-02.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071dc4b07b6de506370e9f_ModestWearStyle%20on%20Instagram%2003.avif",
+      "savedTo": "public/reference-assets/images/68071dc4b07b6de506370e9f_ModestWearStyle-on-Instagram-03.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071dc6d4db9106a36dc6c6_ModestWearStyle%20on%20Instagram%2004.avif",
+      "savedTo": "public/reference-assets/images/68071dc6d4db9106a36dc6c6_ModestWearStyle-on-Instagram-04.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071dcc9894f03e252bdc6d_ModestWearStyle%20on%20Instagram%2005.avif",
+      "savedTo": "public/reference-assets/images/68071dcc9894f03e252bdc6d_ModestWearStyle-on-Instagram-05.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6926afa2eea3e7d5e7b3c226_Webflow.svg",
+      "savedTo": "public/reference-assets/images/6926afa2eea3e7d5e7b3c226_Webflow.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6926afa1eea3e7d5e7b3c224_Group%201437253702.svg",
+      "savedTo": "public/reference-assets/images/6926afa1eea3e7d5e7b3c224_Group-1437253702.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6926afa1eea3e7d5e7b3c223_Group.svg",
+      "savedTo": "public/reference-assets/images/6926afa1eea3e7d5e7b3c223_Group.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6926afa2eea3e7d5e7b3c225_Group%20(1).svg",
+      "savedTo": "public/reference-assets/images/6926afa2eea3e7d5e7b3c225_Group-1.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6926afa1eea3e7d5e7b3c222_Group%20(2).svg",
+      "savedTo": "public/reference-assets/images/6926afa1eea3e7d5e7b3c222_Group-2.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a%2F6808709b78f46f49ce77d21a_Home%20Hero%20Video-poster-00001.jpg",
+      "savedTo": "public/reference-assets/images/6800bdb10604a7b147f8464a-6808709b78f46f49ce77d21a_Home-Hero-Video-poster-00001.jpg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68086e597247de72c53d69bb_fbe082b0c8f8d61f6de9a92166593487_Elegance%20in%20Modesty.avif",
+      "savedTo": "public/reference-assets/images/68086e597247de72c53d69bb_fbe082b0c8f8d61f6de9a92166593487_Elegance-in-Modesty.avif"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/680b5fc3b63884c0c9fa183c_Search.svg",
+      "savedTo": "public/reference-assets/images/680b5fc3b63884c0c9fa183c_Search.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6808bb437d7f023db71fa9bd_Bag.svg",
+      "savedTo": "public/reference-assets/images/6808bb437d7f023db71fa9bd_Bag.svg"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/68071873d1bb97dfbb86e6bd_3148554caddabab88f3dd978c0631004_Rectangle%20724.svg",
+      "savedTo": "public/reference-assets/images/68071873d1bb97dfbb86e6bd_3148554caddabab88f3dd978c0631004_Rectangle-724.svg"
+    }
+  ],
+  "fonts": [
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6800c1c78aeba7b3cc3a5fdd_BeautiqueDisplayCondensed-Light.otf",
+      "savedTo": "public/reference-assets/fonts/6800c1c78aeba7b3cc3a5fdd_BeautiqueDisplayCondensed-Light.otf"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6800c2193c00635bcadde5ff_Beautique%20Display%20Condensed-Regular.otf",
+      "savedTo": "public/reference-assets/fonts/6800c2193c00635bcadde5ff_Beautique-Display-Condensed-Regular.otf"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6800c22cbb39e7c81127421e_Beautique%20Display%20Condensed-Medium.otf",
+      "savedTo": "public/reference-assets/fonts/6800c22cbb39e7c81127421e_Beautique-Display-Condensed-Medium.otf"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6800c2408beb2cfde5256b2e_Beautique%20Display%20Condensed-Bold.otf",
+      "savedTo": "public/reference-assets/fonts/6800c2408beb2cfde5256b2e_Beautique-Display-Condensed-Bold.otf"
+    },
+    {
+      "url": "https://cdn.prod.website-files.com/6800bdb10604a7b147f8464a/6800c2662dadfaecd2760f40_Beautique%20Display%20Condensed-Black.otf",
+      "savedTo": "public/reference-assets/fonts/6800c2662dadfaecd2760f40_Beautique-Display-Condensed-Black.otf"
+    }
+  ]
+}

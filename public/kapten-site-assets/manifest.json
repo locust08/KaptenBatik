@@ -1,0 +1,25 @@
+{
+  "downloadedAt": "2026-03-28T13:01:43.235Z",
+  "assets": [
+    {
+      "bytes": 231342,
+      "target": "public/kapten-site-assets/auth/register-women-category.jpg",
+      "url": "https://www.kaptenbatik.com.my/cdn/shop/files/Top_Categories-02_720x.jpg?v=1740733763"
+    },
+    {
+      "bytes": 159705,
+      "target": "public/kapten-site-assets/auth/login-orkes-man.jpg",
+      "url": "https://www.kaptenbatik.com.my/cdn/shop/files/ORKES_Man_Homepage_jpg_720x.jpg?v=1771558202"
+    },
+    {
+      "bytes": 170143,
+      "target": "public/kapten-site-assets/contact/accessories-flatlay.jpg",
+      "url": "https://www.kaptenbatik.com.my/cdn/shop/files/Top_Categories-04_6ec3ce10-b077-44c5-aa30-8f60c59bd265_720x.jpg?v=1740735318"
+    },
+    {
+      "bytes": 348476,
+      "target": "public/kapten-site-assets/contact/boutique-flagship.jpg",
+      "url": "https://www.kaptenbatik.com.my/cdn/shop/files/DSC00408_1512x.jpg?v=1751274505"
+    }
+  ]
+}

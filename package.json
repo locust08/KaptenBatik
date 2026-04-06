@@ -1,0 +1,25 @@
+{
+  "name": "kapten-batik-site",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "download:assets": "node scripts/download-reference-assets.mjs",
+    "download:figma-assets": "node scripts/download-figma-assets.mjs",
+    "download:kapten-assets": "node scripts/download-kapten-site-assets.mjs"
+  },
+  "dependencies": {
+    "next": "16.2.1",
+    "react": "19.2.0",
+    "react-dom": "19.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.0",
+    "@types/react": "19.2.2",
+    "@types/react-dom": "19.2.2",
+    "playwright": "^1.58.2",
+    "typescript": "5.9.3"
+  }
+}
