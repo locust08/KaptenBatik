@@ -1719,184 +1719,6 @@
   }
 }
 
-@media (max-width: 720px) {
-  .heroSection::before {
-    inset: 0;
-  }
-
-  .heroWrap {
-    grid-template-columns: 1fr;
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    min-height: auto;
-    height: auto;
-    padding-right: 0;
-  }
-
-  .heroVisual {
-    display: grid;
-    gap: 14px;
-    min-height: auto;
-    padding: 56px 0 0;
-    background: var(--product-accent);
-    padding-left: 0.5cm;
-    padding-right: 0.5cm;
-  }
-
-  .backLink {
-    position: static;
-    z-index: 1;
-    justify-self: start;
-  }
-
-  .heroDescription {
-    position: static;
-    order: 4;
-    max-width: calc(40ch + 2cm);
-    margin: 0;
-    font-size: 0.96rem;
-    line-height: 1.68;
-  }
-
-  .heroDescription p {
-    margin: 0 0 12px;
-  }
-
-  .heroImageButton {
-    position: static;
-    order: 2;
-    left: auto;
-    top: auto;
-    bottom: auto;
-    width: 100%;
-    height: auto;
-    transform: none;
-  }
-
-  .heroImageButton::before,
-  .heroImageButton::after {
-    display: none;
-  }
-
-  .heroImage {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    transform: none;
-  }
-
-  .heroTitle {
-    position: static;
-    order: 3;
-    width: auto;
-    max-width: none;
-    padding: 0;
-    margin: 2px 0 0;
-    bottom: auto;
-    font-size: clamp(2rem, 10vw, 2.8rem);
-    line-height: 0.96;
-  }
-
-  .heroNavButton {
-    top: calc(14px + 10cm);
-    bottom: auto;
-    width: 44px;
-    height: 44px;
-    background: rgba(14, 16, 18, 0.22);
-  }
-
-  .heroNavPrev {
-    left: 8px;
-  }
-
-  .heroNavNext {
-    right: 8px;
-  }
-
-  .heroNavCopy {
-    display: none;
-  }
-
-  .heroSidebar {
-    margin-left: 1cm;
-    width: calc(100% - 1cm);
-    padding-right: 0.5cm;
-    gap: 16px;
-    padding: 22px 0 56px;
-    background: #fff;
-  }
-
-  .heroSidebar > .thumbnails {
-    order: -1;
-  }
-
-  .heroSidebar > p {
-    order: 0;
-  }
-
-  .heroSidebar > .ratingSummary {
-    order: 1;
-  }
-
-  .heroSidebar > .controlGroup:nth-of-type(2) {
-    order: 2;
-  }
-
-  .heroSidebar > .controlGroup:nth-of-type(3) {
-    order: 3;
-  }
-
-  .heroSidebar > .actionsColumn {
-    order: 4;
-  }
-
-  .heroSidebar > .careNotes {
-    order: 5;
-  }
-
-  .price {
-    font-size: clamp(1.8rem, 7vw, 2.5rem);
-  }
-
-  .ratingSummary {
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .controlLabelRow,
-  .controlLabel {
-    font-size: 0.64rem;
-  }
-
-  .sizeOptions {
-    gap: 8px;
-  }
-
-  .sizeButton,
-  .quantityButton {
-    min-width: 44px;
-    height: 40px;
-  }
-
-  .quantity {
-    min-height: 48px;
-  }
-
-  .primaryButton,
-  .secondaryButton {
-    min-height: 50px;
-  }
-
-  .whyLove {
-    grid-template-columns: 1fr;
-  }
-
-  .footerGrid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 760px) {
   .headerMain,
   .heroWrap,
@@ -1919,45 +1741,50 @@
     display: none;
   }
 
+  .hasCollectionTransition .heroImageButton,
+  .hasCollectionTransition .heroImage,
+  .hasCollectionTransition .backLink,
+  .hasCollectionTransition .heroDescription,
+  .hasCollectionTransition .heroTitle,
+  .hasCollectionTransition .heroSidebar > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .heroSection {
+    min-height: auto;
+    overflow: hidden;
+  }
+
+  .heroSection::before {
+    inset: 0;
+  }
+
   .heroWrap {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    margin: 0;
+    padding-right: 0;
   }
 
   .heroVisual {
     display: grid;
-    gap: 14px;
+    gap: 16px;
+    align-content: start;
     min-height: auto;
-    padding: 56px 0 0;
-    padding-left: 0.5cm;
-    padding-right: 0.5cm;
+    padding: 68px 20px 30px;
+    background: var(--product-hero-bg, var(--product-accent));
+    overflow: visible;
   }
 
   .backLink {
     position: static;
     justify-self: start;
-  }
-
-  .heroDescription {
-    position: static;
-    order: 4;
-    max-width: calc(36ch + 2cm);
-    margin: 0;
-    font-size: 0.96rem;
-    line-height: 1.68;
-  }
-
-  .heroDescription p {
-    margin: 0 0 12px;
-  }
-
-  .heroImage {
-    position: relative;
-    inset: auto;
-    width: 100%;
-    height: auto;
-    transform: none;
-    object-fit: contain;
+    z-index: 2;
+    font-size: 0.72rem;
   }
 
   .heroImageButton {
@@ -1966,9 +1793,12 @@
     left: auto;
     top: auto;
     bottom: auto;
-    width: 100%;
+    width: min(100%, 348px);
     height: auto;
+    margin: 0 auto;
     transform: none;
+    align-self: start;
+    justify-self: center;
   }
 
   .heroImageButton::before,
@@ -1976,20 +1806,36 @@
     display: none;
   }
 
+  .heroImage {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    max-height: min(110vw, 460px);
+    object-fit: contain;
+    object-position: center top;
+    transform: none;
+    filter:
+      drop-shadow(0 22px 28px rgba(26, 28, 25, 0.16))
+      drop-shadow(0 10px 14px rgba(26, 28, 25, 0.08));
+  }
+
   .heroNavButton {
-    top: calc(14px + 10cm);
+    top: clamp(192px, 46vw, 260px);
     bottom: auto;
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     background: rgba(14, 16, 18, 0.22);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-50%);
   }
 
   .heroNavPrev {
-    left: 8px;
+    left: 12px;
   }
 
   .heroNavNext {
-    right: 8px;
+    right: 12px;
   }
 
   .heroNavCopy {
@@ -2002,57 +1848,73 @@
     width: auto;
     max-width: none;
     padding: 0;
-    margin: 2px 0 0;
+    margin: 0;
     bottom: auto;
-    font-size: clamp(1.9rem, 9.5vw, 2.4rem);
-    line-height: 0.96;
+    font-size: clamp(2.1rem, 9vw, 2.8rem);
+    line-height: 0.94;
+    text-wrap: balance;
+  }
+
+  .heroDescription {
+    position: static;
+    order: 4;
+    max-width: none;
+    margin: 0;
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .heroDescription p {
+    margin: 0 0 12px;
   }
 
   .heroSidebar {
-    margin-left: 1cm;
-    width: calc(100% - 1cm);
-    padding-right: 0.5cm;
-    gap: 16px;
-    padding: 22px 0 36px;
+    width: auto;
+    margin: -6px 14px 0;
+    gap: 14px;
+    padding: 24px 18px 38px;
     justify-content: flex-start;
     background: #fff;
+    border-radius: 28px 28px 0 0;
+    box-shadow: 0 -14px 34px rgba(26, 28, 25, 0.08);
   }
 
-  .heroSidebar > .thumbnails {
-    order: -1;
-  }
-
-  .heroSidebar > p {
-    order: 0;
-  }
-
-  .heroSidebar > .ratingSummary {
+  .heroSidebar > .price {
     order: 1;
   }
 
-  .heroSidebar > .controlGroup:nth-of-type(2) {
+  .heroSidebar > .ratingSummary {
     order: 2;
   }
 
-  .heroSidebar > .controlGroup:nth-of-type(3) {
+  .heroSidebar > .thumbnails {
     order: 3;
   }
 
-  .heroSidebar > .actionsColumn {
+  .heroSidebar > .controlGroup:nth-of-type(1) {
     order: 4;
   }
 
-  .heroSidebar > .careNotes {
+  .heroSidebar > .controlGroup:nth-of-type(2) {
     order: 5;
   }
 
+  .heroSidebar > .actionsColumn {
+    order: 6;
+  }
+
+  .heroSidebar > .careNotes {
+    order: 7;
+  }
+
   .price {
-    font-size: clamp(1.8rem, 7vw, 2.5rem);
+    font-size: clamp(1.9rem, 8vw, 2.7rem);
   }
 
   .ratingSummary {
     flex-wrap: wrap;
     gap: 8px;
+    margin-top: 0;
   }
 
   .controlLabelRow,
@@ -2067,20 +1929,48 @@
   .sizeButton,
   .quantityButton {
     min-width: 44px;
-    height: 40px;
+    height: 42px;
   }
 
   .quantity {
-    min-height: 48px;
+    width: 100%;
+    min-height: 50px;
+    justify-content: space-between;
+  }
+
+  .quantityValueWrap {
+    min-width: auto;
+    flex: 1;
+  }
+
+  .actionsColumn {
+    grid-template-columns: 1fr;
   }
 
   .primaryButton,
   .secondaryButton {
     min-height: 50px;
+    width: 100%;
   }
 
   .thumbnails {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .thumbnailButton {
+    border-radius: 12px;
+  }
+
+  .careNotes {
+    font-size: 0.86rem;
+    line-height: 1.6;
+  }
+
+  .warning {
+    padding: 18px 0 14px;
+    font-size: 0.92rem;
+    line-height: 1.65;
   }
 
   .trustRow,
@@ -2121,21 +2011,53 @@
   }
 
   .trustRow {
-    gap: 8px;
+    gap: 12px;
+    padding: 18px 0 20px;
+  }
+
+  .trustItem {
+    align-items: flex-start;
   }
 
   .whyLove {
-    gap: 36px;
-    padding-top: 72px;
+    gap: 28px;
+    padding: 64px 0 56px;
+  }
+
+  .whyList {
+    gap: 20px;
+    margin-top: 32px;
+  }
+
+  .whyMedia {
+    max-width: none;
+    justify-self: stretch;
+    border-radius: 28px;
+  }
+
+  .reviewSection {
+    padding: 0 0 72px;
+  }
+
+  .reviewHeader {
+    display: grid;
+    gap: 12px;
+    align-items: start;
+    margin-bottom: 24px;
+  }
+
+  .reviewSummary {
+    max-width: none;
+    text-align: left;
   }
 
   .reviewGrid {
     display: flex;
     overflow-x: auto;
     gap: 14px;
-    padding-inline: 0.5cm;
+    padding-inline: 0;
     padding-bottom: 10px;
-    scroll-padding-inline: 0.5cm;
+    scroll-padding-inline: 0;
     scroll-snap-type: x mandatory;
     scrollbar-width: none;
     touch-action: pan-x;
@@ -2146,8 +2068,9 @@
   }
 
   .reviewCard {
-    flex: 0 0 calc(100% - 1cm);
-    max-width: calc(100% - 1cm);
+    flex: 0 0 calc(100% - 18px);
+    max-width: calc(100% - 18px);
+    min-height: 220px;
     scroll-snap-align: start;
     scroll-snap-stop: always;
   }
@@ -2159,20 +2082,19 @@
     margin-top: 14px;
   }
 
-  .reviewDot:first-child {
-    width: 18px;
-    background: var(--gold);
+  .related {
+    padding-bottom: 72px;
   }
 
-  .reviewHeader {
+  .relatedHeader {
     display: grid;
     gap: 12px;
     align-items: start;
+    margin-bottom: 26px;
   }
 
-  .reviewSummary {
-    max-width: none;
-    text-align: left;
+  .relatedGrid {
+    gap: 18px;
   }
 
   .ctaPanel {
@@ -2209,5 +2131,107 @@
 
   .previewThumbnails {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page .heroWrap {
+    --hero-sidebar-width: 0px;
+    --hero-image-max-width: 348px;
+    --hero-image-scale: 1;
+    --hero-image-offset-y: 0px;
+    --hero-title-offset-y: 0px;
+    --hero-image-top-gap: 0px;
+    --hero-shell-height: auto;
+    grid-template-columns: 1fr;
+    width: 100%;
+    min-height: auto;
+    height: auto;
+    margin: 0;
+    padding-right: 0;
+  }
+
+  .page .heroVisual {
+    width: 100%;
+    min-height: auto;
+    padding: 68px 20px 30px;
+  }
+
+  .page .backLink {
+    position: static;
+    justify-self: start;
+    z-index: 2;
+    font-size: 0.72rem;
+  }
+
+  .page .heroImageButton {
+    position: static;
+    order: 2;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    width: min(100%, 348px);
+    max-width: 348px;
+    height: auto;
+    margin: 0 auto;
+    transform: none;
+    align-self: start;
+    justify-self: center;
+  }
+
+  .page .heroImage {
+    position: relative;
+    inset: auto;
+    width: 100%;
+    height: auto;
+    max-height: min(110vw, 460px);
+    object-fit: contain;
+    object-position: center top;
+    transform: none;
+  }
+
+  .page .heroTitle {
+    position: static;
+    order: 3;
+    width: auto;
+    max-width: none;
+    padding: 0;
+    margin: 0;
+    bottom: auto;
+  }
+
+  .page .heroDescription {
+    position: static;
+    order: 4;
+    max-width: none;
+    margin: 0;
+  }
+
+  .page .heroSidebar {
+    width: auto;
+    margin: -6px 14px 0;
+    padding: 24px 18px 38px;
+  }
+}
+
+@media (max-width: 520px) {
+  .heroVisual {
+    padding-inline: 18px;
+  }
+
+  .heroNavPrev {
+    left: 8px;
+  }
+
+  .heroNavNext {
+    right: 8px;
+  }
+
+  .heroSidebar {
+    margin-inline: 10px;
+    padding: 22px 16px 34px;
+  }
+
+  .reviewCard {
+    flex-basis: calc(100% - 12px);
+    max-width: calc(100% - 12px);
   }
 }
