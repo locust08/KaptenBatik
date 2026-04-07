@@ -17,6 +17,8 @@ import { ACCOUNT_STATE_CHANGE_EVENT, readAccountState } from "@/lib/account-stat
 import { rememberCollectionTransition } from "@/lib/collection-transition";
 import { setupScrollReveal } from "@/lib/setup-scroll-reveal";
 
+export const dynamic = "force-dynamic";
+
 const slotOffsets = [-2, -1, 0, 1, 2] as const;
 const slotClasses = [
   "slot-outer-left is-outer",

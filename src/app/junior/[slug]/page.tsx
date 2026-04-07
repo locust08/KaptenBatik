@@ -6,6 +6,8 @@ import {
   juniorProductSlugs,
 } from "@/data/junior-product-details";
 
+export const dynamic = "force-dynamic";
+
 type JuniorProductPageProps = {
   params: Promise<{
     slug: string;

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ContactPage } from "@/components/contact-page";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Contact Us | Kapten Batik",
   description:

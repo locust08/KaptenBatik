@@ -2,6 +2,8 @@ import Link from "next/link";
 import { SiteHeader } from "@/components/site-header";
 import { collectionOrder, collections, type CollectionKey, type CollectionPerson } from "@/data/collection-content";
 
+export const dynamic = "force-dynamic";
+
 type SearchPageProps = {
   searchParams: Promise<{
     collection?: string;

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { ThankYouPage } from "@/components/thank-you-page";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Thank You | Kapten Batik",
   description: "Order confirmation for Kapten Batik purchases.",

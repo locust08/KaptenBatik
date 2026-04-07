@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { WomenProductDetailPage } from "@/components/women-product-detail-page";
 import { getWomenProductDetail, womenProductSlugs } from "@/data/women-product-details";
 
+export const dynamic = "force-dynamic";
+
 type WomenProductPageProps = {
   params: Promise<{
     slug: string;
