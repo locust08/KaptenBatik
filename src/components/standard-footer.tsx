@@ -40,7 +40,7 @@ const socialLinks = [
   },
   {
     className: "is-whatsapp",
-    href: "http://wa.me/60183814392",
+    href: "http://wa.me/01161745814",
     iconClassName: "sprite-whatsapp",
     label: "WhatsApp",
     src: "/figma-assets/footer/social-whatsapp.png",

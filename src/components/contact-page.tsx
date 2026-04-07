@@ -530,7 +530,7 @@ export function ContactPage() {
 
             <p className={styles.formFootnote}>
               For faster replies, do contact our Customer Careline through{" "}
-              <a href="http://wa.me/60183814392" rel="noreferrer" target="_blank">
+              <a href="http://wa.me/01161745814" rel="noreferrer" target="_blank">
                 WhatsApp here.
               </a>
             </p>

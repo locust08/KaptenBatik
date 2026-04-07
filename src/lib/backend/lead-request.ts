@@ -61,7 +61,15 @@ function normalizeFormDataEntries(formData: FormData) {
   return normalized;
 }
 
-function canonicalizeLeadRequest(rawInput: Record<string, unknown>) {
+function makeFallbackSessionId() {
+  if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+}
+
+function canonicalizeLeadRequest(rawInput: Record<string, unknown>, fallbackUrl = "") {
   const selectedProductIds =
     rawInput.selectedProductIds ?? rawInput.selected_product_ids ?? rawInput.selectedProductId ?? rawInput.selected_product_id;
   const selectedProductNames =
@@ -70,6 +78,12 @@ function canonicalizeLeadRequest(rawInput: Record<string, unknown>) {
     normalizeLeadString(rawInput.enquiryCategory ?? rawInput.enquiry_category ?? rawInput.type) ||
     normalizeLeadString(rawInput.selectedService ?? rawInput.selected_service) ||
     "general";
+  const pageUrl = normalizeLeadUrl(rawInput.pageUrl ?? rawInput.page_url) || normalizeLeadUrl(fallbackUrl);
+  const trackingSessionId =
+    normalizeLeadString(rawInput.trackingSessionId ?? rawInput.tracking_session_id ?? rawInput.sessionId) ||
+    normalizeLeadString(rawInput.sessionId) ||
+    makeFallbackSessionId();
+  const fallbackLandingPage = normalizeLeadUrl(fallbackUrl);
 
   return {
     clickId: normalizeLeadString(rawInput.clickId ?? rawInput.click_id),
@@ -78,7 +92,10 @@ function canonicalizeLeadRequest(rawInput: Record<string, unknown>) {
     fbclid: normalizeLeadString(rawInput.fbclid),
     formName: normalizeLeadString(rawInput.formName ?? rawInput.form_name) || "contact_us",
     gclid: normalizeLeadString(rawInput.gclid),
-    landingPage: normalizeLeadUrl(rawInput.landingPage ?? rawInput.landing_page ?? rawInput.page_url ?? rawInput.pageUrl),
+    landingPage:
+      normalizeLeadUrl(rawInput.landingPage ?? rawInput.landing_page ?? rawInput.page_url ?? rawInput.pageUrl) ||
+      pageUrl ||
+      fallbackLandingPage,
     landingPagePath: normalizeLeadString(rawInput.landingPagePath ?? rawInput.landing_page_path),
     message: normalizeLeadString(rawInput.message),
     msclkid: normalizeLeadString(rawInput.msclkid),
@@ -91,7 +108,7 @@ function canonicalizeLeadRequest(rawInput: Record<string, unknown>) {
     selectedProductIds: normalizeLeadStringArray(selectedProductIds),
     selectedProductNames: normalizeLeadStringArray(selectedProductNames),
     selectedService: normalizeLeadString(rawInput.selectedService ?? rawInput.selected_service),
-    trackingSessionId: normalizeLeadString(rawInput.trackingSessionId ?? rawInput.tracking_session_id ?? rawInput.sessionId),
+    trackingSessionId,
     ttclid: normalizeLeadString(rawInput.ttclid),
     utmCampaign: normalizeLeadString(rawInput.utmCampaign ?? rawInput.utm_campaign),
     utmContent: normalizeLeadString(rawInput.utmContent ?? rawInput.utm_content),
@@ -109,7 +126,9 @@ export async function readLeadRequestBody(request: NextRequest): Promise<LeadReq
       ? await request.json()
       : normalizeFormDataEntries(await request.formData());
 
-  return leadRequestSchema.parse(canonicalizeLeadRequest(rawInput as Record<string, unknown>));
+  return leadRequestSchema.parse(
+    canonicalizeLeadRequest(rawInput as Record<string, unknown>, request.headers.get("referer") ?? request.url),
+  );
 }
 
 export function readLeadRequestMeta(request: NextRequest) {

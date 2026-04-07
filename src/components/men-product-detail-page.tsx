@@ -14,6 +14,7 @@ import {
   menProductSlugs,
   MenProductDetail,
 } from "@/data/men-product-details";
+import { ProductDetailMobileAccordions } from "@/components/product-detail-mobile-accordions";
 import { ProductDetailTrustIcon } from "@/components/product-detail-trust-icon";
 import { SiteHeader } from "@/components/site-header";
 import { BrandLogo } from "@/components/brand-logo";
@@ -56,7 +57,7 @@ const socialLinks = [
   },
   {
     className: "is-whatsapp",
-    href: "http://wa.me/60183814392",
+    href: "http://wa.me/01161745814",
     iconClassName: "sprite-whatsapp",
     label: "WhatsApp",
     src: "/figma-assets/footer/social-whatsapp.png",
@@ -271,6 +272,19 @@ export function MenProductDetailPage({ product }: { product: MenProductDetail })
             >
               <img alt={product.title} className={styles.heroImage} src={product.mainImage} />
             </button>
+            <div className={styles.mobileThumbnails} aria-label="Product image gallery thumbnails">
+              {previewImages.map((thumbnail, index) => (
+                <button
+                  aria-label={`Preview product image ${index + 1}`}
+                  className={styles.mobileThumbnailButton}
+                  key={`${thumbnail}-mobile-${index}`}
+                  onClick={() => setPreviewImageIndex(index)}
+                  type="button"
+                >
+                  <img alt="" src={thumbnail} />
+                </button>
+              ))}
+            </div>
             <h1 className={styles.heroTitle}>{product.title}</h1>
           </div>
 
@@ -382,6 +396,12 @@ export function MenProductDetailPage({ product }: { product: MenProductDetail })
                 Buy Now
               </button>
             </div>
+
+            <ProductDetailMobileAccordions
+              careNotes={product.careNotes}
+              description={product.description}
+              whyLove={product.whyLove}
+            />
 
             <div className={styles.thumbnails}>
               {previewImages.map((thumbnail, index) => (
