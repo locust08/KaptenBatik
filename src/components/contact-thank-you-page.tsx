@@ -4,6 +4,10 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { SiteHeader } from "@/components/site-header";
 import { StandardFooter } from "@/components/standard-footer";
+import {
+  readContactThankYouSession,
+  type ContactThankYouSessionPayload,
+} from "@/lib/contact/thank-you-session";
 import { getContactWhatsAppPhoneNumber } from "@/lib/whatsapp/contact-inquiries";
 import styles from "./contact-thank-you-page.module.css";
 
@@ -38,10 +42,21 @@ function formatSubmittedAt(value: string) {
 
 export function ContactThankYouPage() {
   const [redirectTarget, setRedirectTarget] = useState("");
-  const [redirectInSeconds, setRedirectInSeconds] = useState(3);
+  const [redirectInSeconds, setRedirectInSeconds] = useState(5);
+  const [submission, setSubmission] = useState<ContactThankYouSessionPayload | null>(null);
 
   useEffect(() => {
+    const savedSubmission = readContactThankYouSession();
     const whatsappPhone = getContactWhatsAppPhoneNumber();
+
+    if (savedSubmission) {
+      setSubmission(savedSubmission);
+      if (savedSubmission.whatsappRedirectReady && savedSubmission.whatsappUrl) {
+        setRedirectTarget(savedSubmission.whatsappUrl);
+        return;
+      }
+    }
+
     if (whatsappPhone) {
       setRedirectTarget(`https://wa.me/${whatsappPhone}`);
     }
@@ -58,7 +73,7 @@ export function ContactThankYouPage() {
 
     const redirectTimeout = window.setTimeout(() => {
       window.location.replace(redirectTarget);
-    }, 3000);
+    }, 5000);
 
     return () => {
       window.clearInterval(countdownInterval);
@@ -66,7 +81,11 @@ export function ContactThankYouPage() {
     };
   }, [redirectTarget]);
 
-  const formattedSubmittedAt = useMemo(() => formatSubmittedAt(new Date().toISOString()), []);
+  const formattedSubmittedAt = useMemo(
+    () => formatSubmittedAt(submission?.submittedAt ?? new Date().toISOString()),
+    [submission?.submittedAt],
+  );
+  const hasPreparedWhatsApp = submission?.whatsappRedirectReady && submission.whatsappUrl;
 
   return (
     <main className={styles.page}>
@@ -77,12 +96,12 @@ export function ContactThankYouPage() {
           <p className={styles.eyebrow}>Contact Request Received</p>
           <h1>Thank you for reaching out.</h1>
           <p className={styles.heroLead}>
-            We&apos;ve captured your inquiry and are opening WhatsApp so you can continue the conversation
-            with the message you just shared.
+            We&apos;ve captured your inquiry successfully. Take a moment to review this confirmation
+            before we hand you over to WhatsApp.
           </p>
           <p className={styles.heroNote}>
             You&apos;ll be redirected automatically in a few seconds. If the redirect does not happen,
-            use the WhatsApp button below.
+            use the WhatsApp button below to continue manually.
           </p>
         </section>
 
@@ -91,17 +110,19 @@ export function ContactThankYouPage() {
             <div className={styles.panelTitle}>
               <h2>Your request is on its way</h2>
               <p>
-                Your submission was handled by the backend first, and WhatsApp is opening now with the
-                prepared conversation.
+                Your contact form has already been submitted to Kapten Batik. This confirmation page is
+                the final stop before WhatsApp opens for the next step.
               </p>
             </div>
 
             <div className={styles.fallback}>
-              <span>Fallback mode</span>
+              <span>Submission details</span>
               <p>
-                If you reached this page manually, WhatsApp will open without the form context. For a
-                normal submission, the app now redirects directly after backend success.
+                {submission?.leadId
+                  ? `Reference ID: ${submission.leadId}`
+                  : "If you reached this page directly, we can still open WhatsApp for you from here."}
               </p>
+              <p>Submitted at {formattedSubmittedAt}</p>
             </div>
           </div>
 
@@ -109,8 +130,9 @@ export function ContactThankYouPage() {
             <div className={styles.panelTitle}>
               <h2>Continue on WhatsApp</h2>
               <p>
-                Tap the button below if you want to go straight there now, or wait for the automatic
-                handoff.
+                {hasPreparedWhatsApp
+                  ? "We prepared your WhatsApp handoff using the message from your form. You can open it now or wait for the automatic redirect."
+                  : "WhatsApp can still be opened manually from here if the prepared handoff is unavailable."}
               </p>
             </div>
 
@@ -128,10 +150,9 @@ export function ContactThankYouPage() {
             </div>
 
             <p className={styles.countdown}>
-              Redirecting in {redirectInSeconds} second{redirectInSeconds === 1 ? "" : "s"}.
-            </p>
-            <p className={styles.fallback} style={{ marginTop: 16 }}>
-              Submitted at {formattedSubmittedAt}
+              {redirectTarget
+                ? `Redirecting in ${redirectInSeconds} second${redirectInSeconds === 1 ? "" : "s"}.`
+                : "WhatsApp redirect is not available right now. You can still return to the contact form."}
             </p>
           </div>
         </section>

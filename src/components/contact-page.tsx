@@ -1,8 +1,12 @@
 "use client";
 
 import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { SiteHeader } from "@/components/site-header";
 import { StandardFooter } from "@/components/standard-footer";
+import {
+  writeContactThankYouSession,
+} from "@/lib/contact/thank-you-session";
 import { pushLeadFormSubmitSuccessTracking } from "@/lib/tracking/analytics";
 import { getOrCreateContactTrackingSnapshot } from "@/lib/tracking/capture";
 import type { ContactTrackingSnapshot } from "@/types/tracking";
@@ -278,6 +282,7 @@ function distanceKm(
 }
 
 export function ContactPage() {
+  const router = useRouter();
   const [selectedBoutique, setSelectedBoutique] = useState(boutiqueLocations[0].id);
   const [tracking, setTracking] = useState<ContactTrackingSnapshot | null>(null);
   const [userLocation, setUserLocation] = useState<{
@@ -407,12 +412,13 @@ export function ContactPage() {
         tracking,
       });
 
-      if (result.whatsappRedirectReady && result.whatsappUrl) {
-        window.location.replace(result.whatsappUrl);
-        return;
-      }
-
-      setStatus("Your lead was saved, but WhatsApp is not ready right now.");
+      writeContactThankYouSession({
+        leadId: result.leadId,
+        submittedAt: new Date().toISOString(),
+        whatsappRedirectReady: result.whatsappRedirectReady,
+        whatsappUrl: result.whatsappUrl,
+      });
+      router.push("/contact-us/thank-you");
     } catch {
       setStatus("We could not submit your request right now. Please try again.");
     } finally {
