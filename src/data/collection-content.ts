@@ -2,7 +2,8 @@ export type CollectionKey = "men" | "women" | "junior";
 
 export type CollectionPerson = {
   alt: string;
-  detailPath?: string;
+  href: string;
+  id: string;
   image: string;
   name: string;
 };
@@ -65,31 +66,36 @@ export const collections: Record<CollectionKey, CollectionContent> = {
     people: [
       {
         alt: "Maharaja Slim Fit Ilham Muse in Lime Blue",
-        detailPath: "/men/maharaja-slim-fit-ilham-muse-lime-blue",
+        href: "/men/maharaja-slim-fit-ilham-muse-lime-blue",
+        id: "men-ilham-muse-lime-blue",
         image: "/figma-assets/collections/men-outer-left.png",
         name: "Maharaja Slim Fit Ilham Muse in Lime Blue",
       },
       {
         alt: "Maharaja Slim Fit Bloomcycle in Crystal Pink",
-        detailPath: "/men/maharaja-slim-fit-bloomcycle-crystal-pink",
+        href: "/men/maharaja-slim-fit-bloomcycle-crystal-pink",
+        id: "men-bloomcycle-crystal-pink",
         image: "/figma-assets/collections/men-inner-left.png",
         name: "Maharaja Slim Fit Bloomcycle in Crystal Pink",
       },
       {
         alt: "Maharaja Linen Syandana in Aquamarine",
-        detailPath: "/men/maharaja-linen-syandana-aquamarine",
+        href: "/men/maharaja-linen-syandana-aquamarine",
+        id: "men-syandana-aquamarine",
         image: "/figma-assets/collections/men-center.png",
         name: "Maharaja Linen Syandana - Aquamarine",
       },
       {
         alt: "Maharaja Linen Embroidered Mount Kinabalu Turbulance",
-        detailPath: "/men/maharaja-linen-embroidered-mount-kinabalu-turbulance",
+        href: "/men/maharaja-linen-embroidered-mount-kinabalu-turbulance",
+        id: "men-mount-kinabalu-turbulance",
         image: "/figma-assets/collections/men-inner-right.png",
         name: "Maharaja Linen Embroidered Mount Kinabalu Turbulance",
       },
       {
         alt: "KB X Saarat Mahira Long Dress in Wau",
-        detailPath: "/men/endura-canvas-jacket-forest-heart",
+        href: "/men/endura-canvas-jacket-forest-heart",
+        id: "men-forest-heart",
         image: "/figma-assets/collections/men-outer-right.png",
         name: "KB X Saarat Mahira Long Dress in Wau",
       },
@@ -106,31 +112,36 @@ export const collections: Record<CollectionKey, CollectionContent> = {
     people: [
       {
         alt: "Kapten Batik x Saarat Kaftan Set Kamala",
-        detailPath: "/women/kapten-batik-x-saarat-kaftan-set-kamala",
+        href: "/women/kapten-batik-x-saarat-kaftan-set-kamala",
+        id: "women-kamala",
         image: "/figma-assets/collections/women-outer-left.png",
         name: "Kapten Batik x Saarat Kaftan Set - Kamala",
       },
       {
         alt: "Maharani Egypt Dress Tea Plantation in Oyster Mushroom",
-        detailPath: "/women/maharani-egypt-dress-tea-plantation-oyster-mushroom",
+        href: "/women/maharani-egypt-dress-tea-plantation-oyster-mushroom",
+        id: "women-tea-plantation-oyster-mushroom",
         image: "/figma-assets/collections/women-inner-left.png",
         name: "Maharani Egypt Dress Tea Plantation in Oyster Mushroom",
       },
       {
         alt: "Kurung Kedah Set Melody Heritage in Rio Red",
-        detailPath: "/women/kurung-kedah-set-melody-heritage-rio-red",
+        href: "/women/kurung-kedah-set-melody-heritage-rio-red",
+        id: "women-melody-heritage-rio-red",
         image: "/figma-assets/collections/women-center.png",
         name: "Kurung Kedah Set Melody Heritage in Rio Red",
       },
       {
         alt: "Kurung Kedah Set Forest Melody in Campanula",
-        detailPath: "/women/kurung-kedah-set-forest-melody-campanula",
+        href: "/women/kurung-kedah-set-forest-melody-campanula",
+        id: "women-forest-melody-campanula",
         image: "/figma-assets/collections/women-inner-right.png",
         name: "Kurung Kedah Set Forest Melody in Campanula",
       },
       {
         alt: "KB X Saarat Mahira Long Dress in Wau",
-        detailPath: "/women/kb-x-saarat-mahira-long-dress-wau",
+        href: "/women/kb-x-saarat-mahira-long-dress-wau",
+        id: "women-mahira-long-dress-wau",
         image: "/figma-assets/collections/women-outer-right.png",
         name: "KB X Saarat Mahira Long Dress in Wau",
       },
@@ -149,31 +160,36 @@ export const collections: Record<CollectionKey, CollectionContent> = {
     people: [
       {
         alt: "Nusantara Junior Capri Mount Kinabalu in Windsurfer",
-        detailPath: "/junior/nusantara-junior-capri-mount-kinabalu-windsurfer",
+        href: "/junior/nusantara-junior-capri-mount-kinabalu-windsurfer",
+        id: "junior-capri-mount-kinabalu-windsurfer",
         image: "/figma-assets/collections/junior-outer-left.png",
         name: "Nusantara Junior Capri Mount Kinabalu in Windsurfer",
       },
       {
         alt: "Nusantara Junior Chepor Waterfall in Blue Topaz",
-        detailPath: "/junior/nusantara-junior-chepor-waterfall-blue-topaz",
+        href: "/junior/nusantara-junior-chepor-waterfall-blue-topaz",
+        id: "junior-chepor-waterfall-blue-topaz",
         image: "/figma-assets/collections/junior-inner-left.png",
         name: "Nusantara Junior Chepor Waterfall in Blue Topaz",
       },
       {
         alt: "Maharaja Junior Ilham Muse in Picasso Lily",
-        detailPath: "/junior/maharaja-junior-ilham-muse-picasso-lily",
+        href: "/junior/maharaja-junior-ilham-muse-picasso-lily",
+        id: "junior-ilham-muse-picasso-lily",
         image: "/figma-assets/collections/junior-center.png",
         name: "Maharaja Junior Ilham Muse in Picasso Lily",
       },
       {
         alt: "Nusantara Junior Saxosoul in Blue Glow",
-        detailPath: "/junior/nusantara-junior-saxosoul-blue-glow",
+        href: "/junior/nusantara-junior-saxosoul-blue-glow",
+        id: "junior-saxosoul-blue-glow",
         image: "/figma-assets/collections/junior-inner-right.png",
         name: "Nusantara Junior Saxosoul in Blue Glow",
       },
       {
         alt: "Maharaja Junior Gamelan in Golden Cream",
-        detailPath: "/junior/maharaja-junior-gamelan-golden-cream",
+        href: "/junior/maharaja-junior-gamelan-golden-cream",
+        id: "junior-gamelan-golden-cream",
         image: "/figma-assets/collections/junior-outer-right.png",
         name: "Maharaja Junior Gamelan in Golden Cream",
       },

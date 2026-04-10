@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, MouseEvent, TouchEvent, WheelEvent, useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, TouchEvent, WheelEvent, useEffect, useRef, useState, type CSSProperties } from "react";
 import {
   collectionOrder,
   collections,
@@ -18,6 +19,13 @@ import { rememberCollectionTransition } from "@/lib/collection-transition";
 import { setupScrollReveal } from "@/lib/setup-scroll-reveal";
 
 export const dynamic = "force-dynamic";
+
+const COLLECTION_MODEL_INTERACTION = {
+  centerMoveDurationMs: 620,
+  focusDurationMs: 280,
+  reducedMotionNavigationDelayMs: 80,
+  easing: "cubic-bezier(0.22, 1, 0.36, 1)",
+} as const;
 
 const slotOffsets = [-2, -1, 0, 1, 2] as const;
 const slotClasses = [
@@ -196,12 +204,15 @@ function CollectionDescription({ collectionKey }: { collectionKey: CollectionKey
 }
 
 export default function HomePage() {
+  const router = useRouter();
   const [activeCollection, setActiveCollection] = useState<CollectionKey>("men");
   const [carouselIndex, setCarouselIndex] = useState(initialCarouselIndex);
   const [activePillarIndex, setActivePillarIndex] = useState(0);
   const [newsletterMessage, setNewsletterMessage] = useState("");
   const [isHeroVideoMuted, setHeroVideoMuted] = useState(true);
   const [accountState, setAccountState] = useState<"logged-out" | "logged-in">("logged-out");
+  const [activatingPath, setActivatingPath] = useState<string | null>(null);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const [transitioningPath, setTransitioningPath] = useState<string | null>(null);
   const heroVideoRef = useRef<HTMLVideoElement | null>(null);
   const collectionSectionRef = useRef<HTMLElement | null>(null);
@@ -209,23 +220,43 @@ export default function HomePage() {
   const mainRef = useRef<HTMLElement | null>(null);
   const collectionWheelDeltaRef = useRef(0);
   const collectionWheelCooldownRef = useRef<number | null>(null);
+  const collectionCenterTimeoutRef = useRef<number | null>(null);
   const collectionTransitionTimeoutRef = useRef<number | null>(null);
   const brandPillarGridRef = useRef<HTMLDivElement | null>(null);
   const brandPillarCardRefs = useRef<(HTMLElement | null)[]>([]);
+  const isCollectionInteractionLocked = activatingPath !== null || transitioningPath !== null;
+  const collectionCenterMoveDurationMs = prefersReducedMotion
+    ? 0
+    : COLLECTION_MODEL_INTERACTION.centerMoveDurationMs;
+  const collectionFocusDurationMs = prefersReducedMotion
+    ? COLLECTION_MODEL_INTERACTION.reducedMotionNavigationDelayMs
+    : COLLECTION_MODEL_INTERACTION.focusDurationMs;
+  const collectionMotionStyle = {
+    "--collection-focus-duration": `${collectionFocusDurationMs}ms`,
+    "--collection-motion-duration": `${collectionCenterMoveDurationMs}ms`,
+    "--collection-motion-easing": COLLECTION_MODEL_INTERACTION.easing,
+  } as CSSProperties;
 
   const activeContent = collections[activeCollection];
   const activePersonIndex = carouselIndex[activeCollection];
   const activePeople = slotOffsets.map((offset, index) => {
     const length = activeContent.people.length;
     const resolvedIndex = (activePersonIndex + offset + length) % length;
+    const person = activeContent.people[resolvedIndex];
 
     return {
-      person: activeContent.people[resolvedIndex],
+      person,
+      positionIndex: index,
+      productIndex: resolvedIndex,
       slotClass: slotClasses[index],
     };
   });
 
   const handleCollectionChange = (collectionKey: CollectionKey) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     setActiveCollection(collectionKey);
   };
 
@@ -234,6 +265,9 @@ export default function HomePage() {
       if (collectionWheelCooldownRef.current !== null) {
         window.clearTimeout(collectionWheelCooldownRef.current);
       }
+      if (collectionCenterTimeoutRef.current !== null) {
+        window.clearTimeout(collectionCenterTimeoutRef.current);
+      }
       if (collectionTransitionTimeoutRef.current !== null) {
         window.clearTimeout(collectionTransitionTimeoutRef.current);
       }
@@ -241,6 +275,94 @@ export default function HomePage() {
   }, []);
 
   useEffect(() => setupScrollReveal(mainRef.current), []);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const handleMotionPreferenceChange = () => {
+      setPrefersReducedMotion(mediaQuery.matches);
+    };
+
+    handleMotionPreferenceChange();
+
+    mediaQuery.addEventListener("change", handleMotionPreferenceChange);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMotionPreferenceChange);
+    };
+  }, []);
+
+  useEffect(() => {
+    const handleNativeCollectionClick = (event: MouseEvent) => {
+      const target = event.target;
+
+      if (!(target instanceof Element) || !collectionSectionRef.current?.contains(target)) {
+        return;
+      }
+
+      const buttons = Array.from(
+        collectionSectionRef.current.querySelectorAll<HTMLButtonElement>(
+          ".person-card-button[data-detail-path][data-slot-class]:not(:disabled)",
+        ),
+      );
+
+      const button = buttons.find((candidate) => {
+        const rect = candidate.getBoundingClientRect();
+        return (
+          event.clientX >= rect.left &&
+          event.clientX <= rect.right &&
+          event.clientY >= rect.top &&
+          event.clientY <= rect.bottom
+        );
+      });
+
+      if (!button) {
+        return;
+      }
+
+      const detailPath = button.dataset.detailPath;
+      const slotClass = button.dataset.slotClass as SlotClass | undefined;
+
+      if (!detailPath || !slotClass) {
+        return;
+      }
+
+      handleModelActivate(slotClass, detailPath);
+    };
+
+    const handleNativeCollectionKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Enter" && event.key !== " ") {
+        return;
+      }
+
+      const activeElement = document.activeElement;
+
+      if (
+        !(activeElement instanceof HTMLButtonElement) ||
+        !activeElement.matches(".person-card-button[data-detail-path][data-slot-class]") ||
+        !collectionSectionRef.current?.contains(activeElement)
+      ) {
+        return;
+      }
+
+      const detailPath = activeElement.dataset.detailPath;
+      const slotClass = activeElement.dataset.slotClass as SlotClass | undefined;
+
+      if (!detailPath || !slotClass) {
+        return;
+      }
+
+      event.preventDefault();
+      handleModelActivate(slotClass, detailPath);
+    };
+
+    document.addEventListener("click", handleNativeCollectionClick);
+    document.addEventListener("keydown", handleNativeCollectionKeyDown);
+
+    return () => {
+      document.removeEventListener("click", handleNativeCollectionClick);
+      document.removeEventListener("keydown", handleNativeCollectionKeyDown);
+    };
+  }, [activeCollection, activePersonIndex, activatingPath, isCollectionInteractionLocked, prefersReducedMotion, transitioningPath]);
 
   useEffect(() => {
     const grid = brandPillarGridRef.current;
@@ -346,6 +468,10 @@ export default function HomePage() {
   }, []);
 
   const scrollToCollection = (collectionKey: CollectionKey) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     handleCollectionChange(collectionKey);
 
     const nextUrl = new URL(window.location.href);
@@ -359,6 +485,10 @@ export default function HomePage() {
   };
 
   const shiftPeople = (direction: "left" | "right") => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     const step = direction === "right" ? -1 : 1;
 
     setCarouselIndex((current) => {
@@ -387,6 +517,10 @@ export default function HomePage() {
   };
 
   const shiftCollection = (direction: -1 | 1) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     const currentIndex = collectionOrder.indexOf(activeCollection);
     const nextIndex = (currentIndex + direction + collectionOrder.length) % collectionOrder.length;
     const nextCollection = collectionOrder[nextIndex];
@@ -399,6 +533,10 @@ export default function HomePage() {
   };
 
   const handleCollectionWheel = (event: WheelEvent<HTMLElement>) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     const horizontalDelta = event.deltaX;
     const verticalDelta = event.deltaY;
     const isHorizontalSwipe = Math.abs(horizontalDelta) > Math.abs(verticalDelta) + 8;
@@ -459,34 +597,53 @@ export default function HomePage() {
       return;
     }
 
+    if (collectionCenterTimeoutRef.current !== null) {
+      window.clearTimeout(collectionCenterTimeoutRef.current);
+      collectionCenterTimeoutRef.current = null;
+    }
+
+    setActivatingPath(null);
     setTransitioningPath(detailPath);
     rememberCollectionTransition(detailPath);
 
     collectionTransitionTimeoutRef.current = window.setTimeout(() => {
-      window.location.assign(`${detailPath}#product-detail`);
-    }, 280);
+      router.push(`${detailPath}#product-detail`);
+    }, collectionFocusDurationMs);
   };
 
-  const handleModelClick = (
-    event: MouseEvent<HTMLAnchorElement>,
-    slotClass: SlotClass,
-    detailPath?: string,
-  ) => {
+  const handleModelActivate = (slotClass: SlotClass, detailPath: string) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     if (!slotClass.includes("slot-center")) {
-      event.preventDefault();
+      setActivatingPath(detailPath);
       movePersonToCenter(slotClass);
+
+      if (collectionCenterMoveDurationMs === 0) {
+        handleModelSelect(detailPath);
+        return;
+      }
+
+      if (collectionCenterTimeoutRef.current !== null) {
+        window.clearTimeout(collectionCenterTimeoutRef.current);
+      }
+
+      collectionCenterTimeoutRef.current = window.setTimeout(() => {
+        collectionCenterTimeoutRef.current = null;
+        handleModelSelect(detailPath);
+      }, collectionCenterMoveDurationMs);
       return;
     }
 
-    if (!detailPath) {
-      return;
-    }
-
-    event.preventDefault();
     handleModelSelect(detailPath);
   };
 
   const handlePeopleTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    if (isCollectionInteractionLocked) {
+      return;
+    }
+
     const touch = event.touches[0];
 
     if (!touch) {
@@ -500,6 +657,11 @@ export default function HomePage() {
   };
 
   const handlePeopleTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    if (isCollectionInteractionLocked) {
+      peopleTouchStartRef.current = null;
+      return;
+    }
+
     const start = peopleTouchStartRef.current;
     const touch = event.changedTouches[0];
 
@@ -624,6 +786,7 @@ export default function HomePage() {
               <button
                 aria-selected={isActive}
                 className={`collection-tab ${isActive ? "is-active" : ""}`}
+                disabled={isCollectionInteractionLocked}
                 key={collectionKey}
                 onClick={() => handleCollectionChange(collectionKey)}
                 role="tab"
@@ -645,10 +808,11 @@ export default function HomePage() {
             </div>
           </header>
 
-          <div className="people-showcase">
+          <div className="people-showcase" style={collectionMotionStyle}>
             <button
               aria-label={`Move ${activeContent.label.toLowerCase()} looks left`}
               className="carousel-arrow is-left"
+              disabled={isCollectionInteractionLocked}
               onClick={() => shiftPeople("left")}
               type="button"
             >
@@ -657,37 +821,40 @@ export default function HomePage() {
 
             <div
               aria-live="polite"
-              className={`people-grid ${transitioningPath ? "is-transitioning" : ""}`}
+              className={`people-grid ${
+                activatingPath ? "is-activating" : ""
+              } ${transitioningPath ? "is-transitioning" : ""} ${
+                isCollectionInteractionLocked ? "is-interaction-locked" : ""
+              }`}
               onTouchEnd={handlePeopleTouchEnd}
               onTouchStart={handlePeopleTouchStart}
             >
-              {activePeople.map(({ person, slotClass }) => (
+              {activePeople.map(({ person, positionIndex, productIndex, slotClass }) => (
                 <article
                   className={`person-card ${slotClass} ${
-                    transitioningPath === person.detailPath ? "is-transition-selected" : ""
+                    person.href ? "is-clickable" : ""
+                  } ${
+                    activatingPath === person.href ? "is-activation-target" : ""
+                  } ${
+                    transitioningPath === person.href ? "is-transition-selected" : ""
                   }`}
-                  key={`${activeCollection}-${slotClass}`}
+                  data-position-index={positionIndex}
+                  data-product-index={productIndex}
+                  key={person.id}
                 >
-                  {person.detailPath ? (
-                    <Link
-                      aria-label={`View ${person.name}`}
-                      className="person-card-link"
-                      href={person.detailPath}
-                      onClick={(event) => handleModelClick(event, slotClass, person.detailPath)}
-                    >
-                      <div className="person-image-wrap">
-                        <img alt={person.alt} className="person-image" src={person.image} />
-                      </div>
-                      <p className="person-name">{person.name}</p>
-                    </Link>
-                  ) : (
-                    <>
-                      <div className="person-image-wrap">
-                        <img alt={person.alt} className="person-image" src={person.image} />
-                      </div>
-                      <p className="person-name">{person.name}</p>
-                    </>
-                  )}
+                  <button
+                    aria-label={`View ${person.name}`}
+                    className="person-card-button"
+                    data-detail-path={person.href}
+                    data-slot-class={slotClass}
+                    disabled={isCollectionInteractionLocked}
+                    type="button"
+                  >
+                    <div className="person-image-wrap">
+                      <img alt={person.alt} className="person-image" src={person.image} />
+                    </div>
+                    <p className="person-name">{person.name}</p>
+                  </button>
                 </article>
               ))}
             </div>
@@ -695,6 +862,7 @@ export default function HomePage() {
             <button
               aria-label={`Move ${activeContent.label.toLowerCase()} looks right`}
               className="carousel-arrow is-right"
+              disabled={isCollectionInteractionLocked}
               onClick={() => shiftPeople("right")}
               type="button"
             >

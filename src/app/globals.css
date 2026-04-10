@@ -1463,12 +1463,31 @@ img {
   min-width: 0;
   text-align: center;
   transition:
-    transform 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    width 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 620ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    width var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    opacity var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    filter var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1));
   will-change: transform, width, opacity, filter;
   transform-style: preserve-3d;
+}
+
+.person-card.is-clickable {
+  cursor: pointer;
+}
+
+.person-card-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: inherit;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: inherit;
+  cursor: inherit;
 }
 
 .person-card.is-outer,
@@ -1481,16 +1500,25 @@ img {
   filter: blur(1.4px) saturate(0.8);
 }
 
-.person-card-link {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: inherit;
-  color: inherit;
+.people-grid.is-activating .person-card {
+  transition-duration: var(--collection-motion-duration, 620ms);
+}
+
+.people-grid.is-activating .person-card:not(.is-activation-target) {
+  opacity: 0.42;
+  filter: blur(2.4px) saturate(0.74);
+}
+
+.people-grid.is-activating .person-card:not(.is-activation-target) .person-card-button {
+  transform: scale(0.985);
+}
+
+.person-card.is-activation-target {
+  z-index: 7;
 }
 
 .people-grid.is-transitioning .person-card {
-  transition-duration: 280ms;
+  transition-duration: var(--collection-focus-duration, 280ms);
 }
 
 .people-grid.is-transitioning .person-card:not(.is-transition-selected) {
@@ -1503,15 +1531,29 @@ img {
 }
 
 .person-card.is-transition-selected .person-image-wrap {
-  animation: collection-model-lift 280ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: collection-model-lift var(--collection-focus-duration, 280ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
 .person-card.is-transition-selected .person-image {
-  animation: collection-model-zoom 280ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation: collection-model-zoom var(--collection-focus-duration, 280ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)) forwards;
 }
 
 .person-card.is-transition-selected .person-name {
   opacity: 0;
+}
+
+.person-card-button:focus-visible {
+  outline: none;
+}
+
+.person-card-button:focus-visible .person-image-wrap::after {
+  opacity: 1;
+  filter: blur(18px);
+}
+
+.person-card-button:focus-visible .person-name {
+  text-decoration: underline;
+  text-underline-offset: 0.22em;
 }
 
 .person-image-wrap {
@@ -1521,7 +1563,7 @@ img {
   justify-content: center;
   height: var(--figure-height);
   min-height: 0;
-  transition: height 620ms cubic-bezier(0.22, 1, 0.36, 1);
+  transition: height var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .person-image-wrap::before {
@@ -1545,8 +1587,8 @@ img {
   object-fit: contain;
   filter: drop-shadow(0 10px 18px rgba(26, 28, 25, 0.14));
   transition:
-    height 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    filter 620ms cubic-bezier(0.22, 1, 0.36, 1),
+    height var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    filter var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
     transform 320ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
@@ -1562,9 +1604,9 @@ img {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
   transition:
-    max-width 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    font-size 620ms cubic-bezier(0.22, 1, 0.36, 1),
-    opacity 620ms cubic-bezier(0.22, 1, 0.36, 1);
+    max-width var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    font-size var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1)),
+    opacity var(--collection-motion-duration, 620ms) var(--collection-motion-easing, cubic-bezier(0.22, 1, 0.36, 1));
 }
 
 .person-card.is-outer .person-name {
@@ -1661,6 +1703,10 @@ img {
 .slot-center:hover .person-image-wrap::after {
   opacity: 1;
   filter: blur(18px);
+}
+
+.people-grid.is-interaction-locked .person-card-button {
+  pointer-events: none;
 }
 
 .slot-inner-right .person-name,

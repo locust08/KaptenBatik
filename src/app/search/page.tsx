@@ -17,8 +17,8 @@ type ClothItem = {
 };
 
 function createPersonHref(collectionKey: CollectionKey, person: CollectionPerson) {
-  if (person.detailPath) {
-    return person.detailPath;
+  if (person.href) {
+    return person.href;
   }
 
   return `/?collection=${collectionKey}#collection`;
