@@ -1,0 +1,89 @@
+.root {
+  display: none;
+}
+
+.section {
+  border-top: 1px solid rgba(26, 28, 25, 0.08);
+}
+
+.section:last-child {
+  border-bottom: 1px solid rgba(26, 28, 25, 0.08);
+}
+
+.summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  cursor: pointer;
+  list-style: none;
+  color: var(--ink);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.summary::-webkit-details-marker {
+  display: none;
+}
+
+.icon {
+  flex: none;
+  color: var(--product-accent, var(--gold));
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 180ms ease;
+}
+
+.section[open] .icon {
+  transform: rotate(45deg);
+}
+
+.content {
+  display: grid;
+  gap: 12px;
+  padding: 0 0 16px;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.72;
+}
+
+.content p,
+.content ul,
+.content li,
+.content h4 {
+  margin: 0;
+}
+
+.content ul {
+  display: grid;
+  gap: 10px;
+  padding-left: 1.1rem;
+}
+
+.whyList {
+  display: grid;
+  gap: 14px;
+}
+
+.whyItem {
+  display: grid;
+  gap: 6px;
+}
+
+.whyItem h4 {
+  color: var(--ink);
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .root {
+    display: grid;
+    gap: 0;
+  }
+}
