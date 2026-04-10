@@ -61,6 +61,18 @@ export async function POST(request: NextRequest) {
     return buildErrorResponse(result.errors[0] ?? "We could not save your inquiry right now. Please try again.");
   }
 
+  if (!result.emailSent) {
+    return NextResponse.json(
+      {
+        ...result,
+        success: false,
+        error:
+          "We saved your inquiry, but the email notification did not send. Please try again or contact us on WhatsApp.",
+      },
+      { status: 502 },
+    );
+  }
+
   const acceptsJson = (request.headers.get("accept") ?? "").includes("application/json");
 
   if (acceptsJson) {

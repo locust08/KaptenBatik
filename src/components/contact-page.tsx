@@ -358,7 +358,7 @@ export function ContactPage() {
     setStatus("");
 
     try {
-      const response = await fetch("/api/leads", {
+      const response = await fetch("/api/contact-inquiries", {
         body: JSON.stringify(payload),
         headers: {
           Accept: "application/json",
@@ -393,6 +393,11 @@ export function ContactPage() {
 
       if (!response.ok || !result.success) {
         setStatus(!result.success && result.error ? result.error : "We could not submit your request right now.");
+        return;
+      }
+
+      if (!result.emailSent) {
+        setStatus("Your inquiry was saved, but the email notification did not send. Please try again or contact us on WhatsApp.");
         return;
       }
 
@@ -458,7 +463,12 @@ export function ContactPage() {
             </p>
           </div>
 
-          <form action="/api/leads" className={styles.inquiryForm} method="post" onSubmit={handleSubmit}>
+          <form
+            action="/api/contact-inquiries"
+            className={styles.inquiryForm}
+            method="post"
+            onSubmit={handleSubmit}
+          >
             {tracking ? (
               <>
                 <input name="capturedAt" type="hidden" value={tracking.capturedAt} />

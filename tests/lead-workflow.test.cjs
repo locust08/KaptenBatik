@@ -235,6 +235,76 @@ test("lead workflow saves, syncs, emails, and prepares WhatsApp redirect", async
   ]);
 });
 
+test("contact inquiries fail when admin email was not sent", async () => {
+  setMock("lib/backend/contact-inquiry-request.ts", {
+    readContactInquiryRequestBody: async () => ({
+      email: "julian@example.com",
+      enquiryCategory: "Personal Styling",
+      formName: "contact_us",
+      landingPage: "http://localhost:3000/contact-us",
+      message: "Hello, I would like help with my inquiry.",
+      name: "Julian Tan",
+      trackingSessionId: "session-123",
+    }),
+    readContactInquiryRequestMeta: () => ({
+      ipAddress: "127.0.0.1",
+      userAgent: "node-test",
+    }),
+  });
+
+  setMock("lib/backend/contact-inquiry-workflow.ts", {
+    processContactInquirySubmission: async () => ({
+      emailConfigured: true,
+      emailSent: false,
+      emailStatus: {
+        attempted: true,
+        configured: true,
+        sent: false,
+        warnings: ["Resend request failed."],
+      },
+      errors: [],
+      leadId: "lead-123",
+      leadSaved: true,
+      processingComplete: true,
+      sheetSynced: true,
+      sheetSyncStatus: {
+        attempted: true,
+        headersCreated: true,
+        rowMode: "append",
+        rowNumber: 7,
+        synced: true,
+        tabCreated: false,
+        warnings: [],
+      },
+      success: true,
+      trackingReady: true,
+      warnings: ["Resend request failed."],
+      whatsappMessage: "prefilled whatsapp message",
+      whatsappRedirectReady: true,
+      whatsappUrl: "https://wa.me/01161745814?text=prefilled%20whatsapp%20message",
+    }),
+  });
+
+  const { POST } = require(path.join(srcRoot, "app/api/contact-inquiries/route.ts"));
+
+  const response = await POST({
+    headers: new Headers({
+      accept: "application/json",
+      origin: "http://localhost:3000",
+    }),
+    nextUrl: {
+      origin: "http://localhost:3000",
+    },
+  });
+
+  const payload = await response.json();
+
+  assert.equal(response.status, 502);
+  assert.equal(payload.success, false);
+  assert.equal(payload.emailSent, false);
+  assert.match(payload.error, /email notification did not send/i);
+});
+
 test("email fallback resolves to Ava when resend recipients are unset", () => {
   resetMock("lib/tracking/server-env.ts");
 

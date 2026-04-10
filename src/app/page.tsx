@@ -27,6 +27,8 @@ const slotClasses = [
   "slot-inner-right is-inner",
   "slot-outer-right is-outer",
 ] as const;
+type SlotClass = (typeof slotClasses)[number];
+const slotOffsetByClass = new Map(slotClasses.map((slotClass, index) => [slotClass, slotOffsets[index]]));
 const initialCarouselIndex = Object.fromEntries(
   collectionOrder.map((key) => [key, collections[key].defaultActiveIndex]),
 ) as Record<CollectionKey, number>;
@@ -368,6 +370,22 @@ export default function HomePage() {
     });
   };
 
+  const movePersonToCenter = (slotClass: SlotClass) => {
+    const offset = slotOffsetByClass.get(slotClass);
+
+    if (typeof offset !== "number" || offset === 0) {
+      return;
+    }
+
+    setCarouselIndex((current) => {
+      const length = collections[activeCollection].people.length;
+      return {
+        ...current,
+        [activeCollection]: (current[activeCollection] + offset + length) % length,
+      };
+    });
+  };
+
   const shiftCollection = (direction: -1 | 1) => {
     const currentIndex = collectionOrder.indexOf(activeCollection);
     const nextIndex = (currentIndex + direction + collectionOrder.length) % collectionOrder.length;
@@ -451,15 +469,12 @@ export default function HomePage() {
 
   const handleModelClick = (
     event: MouseEvent<HTMLAnchorElement>,
-    slotClass: string,
+    slotClass: SlotClass,
     detailPath?: string,
   ) => {
-    const isLeftSide = slotClass.includes("left");
-    const isRightSide = slotClass.includes("right");
-
-    if (isLeftSide || isRightSide) {
+    if (!slotClass.includes("slot-center")) {
       event.preventDefault();
-      shiftPeople(isLeftSide ? "right" : "left");
+      movePersonToCenter(slotClass);
       return;
     }
 
