@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 
+import { renderKaptenBatikAdminEmail } from "@/lib/email/brand-template";
 import { escapeHtml } from "@/lib/utils/html";
 import { getServerTrackingEnv, resolveResendFromEmail, resolveResendToEmail } from "@/lib/tracking/server-env";
 import type { LeadRecord } from "@/types/leads";
@@ -91,57 +92,67 @@ export async function sendLeadAdminEmail(lead: LeadRecord) {
         `Referrer: ${lead.referrer || "N/A"}`,
         `User Agent: ${lead.userAgent || "N/A"}`,
       ].join("\n"),
-      html: `
-        <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111;">
-          <h2 style="margin: 0 0 16px;">New Kapten Batik lead</h2>
-          <p style="margin: 0 0 20px;">A new lead was saved to Supabase and synced to the secondary workflow.</p>
-
-          <h3 style="margin: 24px 0 8px;">Lead Summary</h3>
-          <table style="border-collapse: collapse; width: 100%; max-width: 760px;">
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Lead ID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.id)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Created At</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.createdAt)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Name</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.name)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Email</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.email)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Phone</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.phone || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Message</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.message)}</td></tr>
-          </table>
-
-          <h3 style="margin: 24px 0 8px;">Form Details</h3>
-          <table style="border-collapse: collapse; width: 100%; max-width: 760px;">
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Form Name</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.formName)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Enquiry Category</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.enquiryCategory || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Selected Service</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.selectedService || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Selected Product IDs</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(formatList(lead.selectedProductIds))}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Selected Product Names</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(formatList(lead.selectedProductNames))}</td></tr>
-          </table>
-
-          <h3 style="margin: 24px 0 8px;">Tracking</h3>
-          <table style="border-collapse: collapse; width: 100%; max-width: 760px;">
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>UTM Source</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.utmSource || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>UTM Medium</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.utmMedium || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>UTM Campaign</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.utmCampaign || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>UTM Content</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.utmContent || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>UTM Term</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.utmTerm || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>GCLID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.gclid || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>FBCLID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.fbclid || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>MSCLKID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.msclkid || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>TTCLID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.ttclid || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Click ID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.clickId || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Tracking Session ID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.trackingSessionId || "N/A")}</td></tr>
-          </table>
-
-          <h3 style="margin: 24px 0 8px;">Context</h3>
-          <table style="border-collapse: collapse; width: 100%; max-width: 760px;">
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Landing Page URL</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.landingPage || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Landing Page Path</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.landingPagePath || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Page URL</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.pageUrl || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Page Path</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.pagePath || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Page History</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(pageHistoryText)}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Referrer</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.referrer || "N/A")}</td></tr>
-            <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>User Agent</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(lead.userAgent || "N/A")}</td></tr>
-          </table>
-        </div>
-      `,
+      html: renderKaptenBatikAdminEmail({
+        badge: "Lead Notification",
+        intro: "A new Kapten Batik lead was captured and passed through the website workflow. Review the details below and reply directly if needed.",
+        message: escapeHtml(lead.message),
+        sections: [
+          {
+            rows: [
+              { label: "Lead ID", value: escapeHtml(lead.id) },
+              { label: "Created At", value: escapeHtml(lead.createdAt) },
+              { label: "Name", value: escapeHtml(lead.name) },
+              { label: "Email", value: escapeHtml(lead.email) },
+              { label: "Phone", value: escapeHtml(lead.phone || "N/A") },
+            ],
+            title: "Lead Summary",
+          },
+          {
+            rows: [
+              { label: "Form Name", value: escapeHtml(lead.formName) },
+              { label: "Enquiry Category", value: escapeHtml(lead.enquiryCategory || "N/A") },
+              { label: "Selected Service", value: escapeHtml(lead.selectedService || "N/A") },
+              { label: "Selected Product IDs", value: escapeHtml(formatList(lead.selectedProductIds)) },
+              { label: "Selected Product Names", value: escapeHtml(formatList(lead.selectedProductNames)) },
+            ],
+            title: "Form Details",
+          },
+          {
+            rows: [
+              { label: "UTM Source", value: escapeHtml(lead.utmSource || "N/A") },
+              { label: "UTM Medium", value: escapeHtml(lead.utmMedium || "N/A") },
+              { label: "UTM Campaign", value: escapeHtml(lead.utmCampaign || "N/A") },
+              { label: "UTM Content", value: escapeHtml(lead.utmContent || "N/A") },
+              { label: "UTM Term", value: escapeHtml(lead.utmTerm || "N/A") },
+              { label: "GCLID", value: escapeHtml(lead.gclid || "N/A") },
+              { label: "FBCLID", value: escapeHtml(lead.fbclid || "N/A") },
+              { label: "MSCLKID", value: escapeHtml(lead.msclkid || "N/A") },
+              { label: "TTCLID", value: escapeHtml(lead.ttclid || "N/A") },
+              { label: "Click ID", value: escapeHtml(lead.clickId || "N/A") },
+              { label: "Tracking Session ID", value: escapeHtml(lead.trackingSessionId || "N/A") },
+            ],
+            title: "Tracking",
+          },
+          {
+            rows: [
+              { label: "Landing Page URL", value: escapeHtml(lead.landingPage || "N/A") },
+              { label: "Landing Page Path", value: escapeHtml(lead.landingPagePath || "N/A") },
+              { label: "Page URL", value: escapeHtml(lead.pageUrl || "N/A") },
+              { label: "Page Path", value: escapeHtml(lead.pagePath || "N/A") },
+              { label: "Page History", value: escapeHtml(pageHistoryText) },
+              { label: "Referrer", value: escapeHtml(lead.referrer || "N/A") },
+              { label: "User Agent", value: escapeHtml(lead.userAgent || "N/A") },
+            ],
+            title: "Context",
+          },
+        ],
+        summary: [
+          { label: "From", value: escapeHtml(lead.name) },
+          { label: "Form", value: escapeHtml(lead.formName) },
+          { label: "Reply To", value: escapeHtml(lead.email) },
+        ],
+        title: "New Kapten Batik Lead",
+      }),
     });
 
     return {

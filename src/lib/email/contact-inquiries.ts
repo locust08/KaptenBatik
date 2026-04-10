@@ -1,5 +1,6 @@
 import { Resend } from "resend";
 
+import { renderKaptenBatikAdminEmail } from "@/lib/email/brand-template";
 import { escapeHtml } from "@/lib/utils/html";
 import { getServerTrackingEnv, resolveResendFromEmail, resolveResendToEmail } from "@/lib/tracking/server-env";
 import type { ContactInquiryRecord } from "@/types/contact-automation";
@@ -53,27 +54,39 @@ export async function sendAdminContactInquiryEmail(inquiry: ContactInquiryRecord
       inquiry.message,
     ].join("\n"),
     to,
-    html: `
-      <div style="font-family: Arial, sans-serif; line-height: 1.5; color: #111;">
-        <h2 style="margin: 0 0 16px;">Kapten Batik contact inquiry</h2>
-        <p style="margin: 0 0 12px;">A new inquiry has been submitted through the website.</p>
-        <table style="border-collapse: collapse; width: 100%; max-width: 720px;">
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Lead ID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.id)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Name</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.fullName)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Email</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.email)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Phone</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.phone || "N/A")}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Inquiry</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.type)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Landing Page</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.landingPage)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Referrer</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.referrer || "N/A")}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Session ID</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.sessionId)}</td></tr>
-          <tr><td style="padding: 8px 12px; border-bottom: 1px solid #eee;"><strong>Submitted At</strong></td><td style="padding: 8px 12px; border-bottom: 1px solid #eee;">${escapeHtml(inquiry.submittedAt)}</td></tr>
-        </table>
-        <div style="margin-top: 16px; padding: 16px; background: #f7f7f7; border-radius: 8px;">
-          <strong>Message</strong>
-          <p style="white-space: pre-wrap; margin: 8px 0 0;">${escapeHtml(inquiry.message)}</p>
-        </div>
-      </div>
-    `,
+    html: renderKaptenBatikAdminEmail({
+      badge: "Contact Inquiry",
+      intro: "A new inquiry came in through the Kapten Batik contact page. The message below is ready for follow-up.",
+      message: escapeHtml(inquiry.message),
+      sections: [
+        {
+          rows: [
+            { label: "Lead ID", value: escapeHtml(inquiry.id) },
+            { label: "Name", value: escapeHtml(inquiry.fullName) },
+            { label: "Email", value: escapeHtml(inquiry.email) },
+            { label: "Phone", value: escapeHtml(inquiry.phone || "N/A") },
+            { label: "Inquiry Type", value: escapeHtml(inquiry.type) },
+            { label: "Submitted At", value: escapeHtml(inquiry.submittedAt) },
+          ],
+          title: "Customer Details",
+        },
+        {
+          rows: [
+            { label: "Landing Page", value: escapeHtml(inquiry.landingPage) },
+            { label: "Referrer", value: escapeHtml(inquiry.referrer || "N/A") },
+            { label: "Session ID", value: escapeHtml(inquiry.sessionId) },
+            { label: "UTM", value: escapeHtml(`${inquiry.utmSource || "direct"} / ${inquiry.utmMedium || "none"} / ${inquiry.utmCampaign || "none"}`) },
+          ],
+          title: "Journey Context",
+        },
+      ],
+      summary: [
+        { label: "From", value: escapeHtml(inquiry.fullName) },
+        { label: "Inquiry", value: escapeHtml(inquiry.type) },
+        { label: "Reply To", value: escapeHtml(inquiry.email) },
+      ],
+      title: "Kapten Batik Contact Inquiry",
+    }),
   });
 
   return { skipped: false as const };
